@@ -6,6 +6,7 @@ class Game {
     this.board = []
     this.makeBoard()
     this.makeHtmlBoard()
+    this.gameOver = false
   }
 
   makeBoard() {
@@ -16,6 +17,7 @@ class Game {
 
   makeHtmlBoard() {
     const board = document.getElementById('board')
+    board.innerHTML = ''
 
     const top = document.createElement('tr')
     top.setAttribute('id', 'column-top')
@@ -67,6 +69,10 @@ class Game {
 
   endGame(msg) {
     alert(msg)
+
+    // disables ability to continue game when there's a win or tie
+    const top = document.querySelector('#column-top')
+    top.removeEventListener('click', this.handleGameClick)
   }
 
   handleClick(evt) {
@@ -80,6 +86,7 @@ class Game {
 
     // check for win
     if (this.checkForWin()) {
+      this.gameOver = true
       return this.endGame(`Player ${this.currPlayer} won!`)
     }
 
@@ -120,4 +127,9 @@ class Game {
   }
 }
 
-new Game()
+const startGame = document.getElementById('start-game')
+
+// initiate when button is clicked
+startGame.addEventListener('click', () => {
+  new Game()
+})

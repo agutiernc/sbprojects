@@ -1,3 +1,19 @@
+button {
+  background-color: blueviolet;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 5px;
+  border: none;
+  width: 150px;
+  height: 40px;
+  text-align: center;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.5s;
+  margin-bottom: 20px;
+}
+
 /* game board table */
 
 #board td {
