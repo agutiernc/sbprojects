@@ -19,7 +19,10 @@ class Game {
 
     const top = document.createElement('tr')
     top.setAttribute('id', 'column-top')
-    // top.addEventListener('click', handleClick) // do handleClick
+
+    this.handleGameClick = this.handleClick.bind(this)
+    
+    top.addEventListener('click', this.handleGameClick) // do handleClick
 
     for (let x = 0; x < this.width; x++) {
       const headCell = document.createElement('td')
@@ -46,7 +49,7 @@ class Game {
 
   findSpotForCol(x) {
     for (let y = this.height - 1; y >= 0; y--) {
-      if (!board[y][x]) return y
+      if (!this.board[y][x]) return y
     }
 
     return null
@@ -62,14 +65,21 @@ class Game {
     spot.append(piece)
   }
 
+  endGame(msg) {
+    alert(msg)
+  }
+
   handleClick(evt) {
     const x = +evt.target.id
-    const y = findSpotForCol(x)
+    const y = this.findSpotForCol(x)
 
     if (y === null) return
 
-    board[y][x] = this.currPlayer
-    placeInTable(y, x)
+    this.board[y][x] = this.currPlayer
+    this.placeInTable(y, x)
+
+    // switch players
+    this.currPlayer = this.currPlayer === 1 ? 2 : 1
   }
 }
 
