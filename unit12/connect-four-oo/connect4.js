@@ -1,13 +1,18 @@
 class Game {
-  constructor(height = 6, width = 7) {
+  constructor(p1, p2, height = 6, width = 7) {
+    this.players = [p1, p2]
     this.height = height
     this.width = width
-    this.currPlayer = 1
+    this.currPlayer = p1
     this.board = []
     this.makeBoard()
     this.makeHtmlBoard()
     this.gameOver = false
   }
+
+   /** makeBoard: create in-JS board structure:
+   *   board = array of rows, each row is array of cells  (board[y][x])
+   */
 
   makeBoard() {
     for (let y = 0; y < this.height; y++) {
@@ -15,17 +20,20 @@ class Game {
     }
   }
 
+  /** makeHtmlBoard: make HTML table and row of column tops.  */
+
   makeHtmlBoard() {
     const board = document.getElementById('board')
     board.innerHTML = ''
 
+    // make column tops (clickable area for adding a piece to that column)
     const top = document.createElement('tr')
     top.setAttribute('id', 'column-top')
 
     this.handleGameClick = this.handleClick.bind(this)
     
     top.addEventListener('click', this.handleGameClick) // do handleClick
-
+  
     for (let x = 0; x < this.width; x++) {
       const headCell = document.createElement('td')
 
@@ -35,6 +43,7 @@ class Game {
 
     board.append(top)
 
+    // make main part of board
     for (let y = 0; y < this.height; y++) {
       const row = document.createElement('tr')
 
@@ -49,6 +58,8 @@ class Game {
     }
   }
 
+  /** findSpotForCol: given column x, return top empty y (null if filled) */
+
   findSpotForCol(x) {
     for (let y = this.height - 1; y >= 0; y--) {
       if (!this.board[y][x]) return y
@@ -57,15 +68,19 @@ class Game {
     return null
   }
 
+  /** placeInTable: update DOM to place piece into HTML table of board */
+
   placeInTable(y, x) {
     const piece = document.createElement('div')
     piece.classList.add('piece')
-    piece.classList.add(`p${this.currPlayer}`)
+    piece.style.backgroundColor = this.currPlayer.color
     piece.style.top = -50 * (y + 2)
 
     const spot = document.getElementById(`${y}-${x}`);
     spot.append(piece)
   }
+
+  /** endGame: announce game end */
 
   endGame(msg) {
     alert(msg)
@@ -75,31 +90,42 @@ class Game {
     top.removeEventListener('click', this.handleGameClick)
   }
 
+  /** handleClick: handle click of column top to play piece */
+
   handleClick(evt) {
-    const x = +evt.target.id
+    const x = +evt.target.id // get x from ID of clicked cell
+
+    // get next spot in column (if none, ignore click)
     const y = this.findSpotForCol(x)
 
     if (y === null) return
 
+    // place piece in board and add to HTML table
     this.board[y][x] = this.currPlayer
     this.placeInTable(y, x)
 
     // check for win
     if (this.checkForWin()) {
       this.gameOver = true
-      return this.endGame(`Player ${this.currPlayer} won!`)
+      return this.endGame(`Player ${this.currPlayer.color.toUpperCase()} won!`)
     }
 
     // check for tie
     if (this.board.every(row => row.every(cell => cell))) {
-      return endGame('Tie!');
+      return this.endGame('Tie!');
     }
 
     // switch players
-    this.currPlayer = this.currPlayer === 1 ? 2 : 1
+    this.currPlayer = this.currPlayer === this.players[0] ?
+      this.players[1] : this.players[0]
   }
 
+  /** checkForWin: check board cell-by-cell for "does a win start here?" */
+
   checkForWin() {
+    // Check four cells to see if they're all color of current player
+    //  - cells: list of four (y, x) cells
+    //  - returns true if all are legal coordinates & all match currPlayer
     const _win = (cells) => cells.every(
       ([y, x]) =>
         y >= 0 &&
@@ -127,9 +153,25 @@ class Game {
   }
 }
 
+class Player {
+  constructor(color) {
+    this.color = color
+  }
+}
+
 const startGame = document.getElementById('start-game')
 
-// initiate when button is clicked
+// initiates game
 startGame.addEventListener('click', () => {
-  new Game()
+  let p1Color = document.getElementById('p1-color')
+  let p2Color = document.getElementById('p2-color')
+
+  let p1 = new Player(p1Color.value)
+  let p2 = new Player(p2Color.value)
+
+  new Game(p1, p2)
+
+  // reset input fields
+  p1Color.value = ''
+  p2Color.value = ''
 })

@@ -1,3 +1,11 @@
+input {
+  border-radius: 5px;
+  border: 1px solid black;
+  height: 30px;
+  width: 150px;
+  margin: 10px 5px;
+}
+
 button {
   background-color: blueviolet;
   color: #fff;
@@ -6,7 +14,7 @@ button {
   border-radius: 5px;
   border: none;
   width: 150px;
-  height: 40px;
+  height: 35px;
   text-align: center;
   text-transform: uppercase;
   cursor: pointer;
@@ -31,13 +39,13 @@ button {
   border-radius: 50%;
 }
 
-.piece.p1 {
+/* .piece.p1 {
   background-color: red;
 }
 
 .piece.p2 {
   background-color: blue;
-}
+} */
 
 /* column-top is table row of clickable areas for each column */
 
