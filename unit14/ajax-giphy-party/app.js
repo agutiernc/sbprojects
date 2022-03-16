@@ -1,21 +1,19 @@
-const input = document.querySelector('.search')
-const form = document.querySelector('#search-form')
 const results = document.querySelector('#search-results')
 
-form.addEventListener('submit', async function(e) {
+$('form').submit(function(e) {
   e.preventDefault()
 
   getGif()
 
-  // reset input
-  input.value = ''
+  // reset input value
+  $('input').val('')
 })
 
 async function getGif() {
   try {
     const res = await axios.get('http://api.giphy.com/v1/gifs/search', {
       params: {
-        q: input.value,
+        q:   $('input').val(),
         api_key: "MhAodEJIJxQMxW9XqxKjyXfNYdLoOIym"
       }
     })
@@ -28,7 +26,7 @@ async function getGif() {
     alert('Please try again')
 
     // reset input
-    input.value = ''
+    $('input').val('')
   }
 }
 
@@ -42,3 +40,8 @@ function createImg(url) {
   imgDiv.append(img)
   results.append(imgDiv)
 }
+
+// delete all images
+$('#remove-btn').on('click', function() {
+  $('.img-container, img').remove()
+})
