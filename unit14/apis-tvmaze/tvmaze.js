@@ -27,7 +27,6 @@ async function searchShows(query) {
     }
   })
 
-  // console.log(res.data)
   const getShows = res.data.map(s => (
     {
       id: s.show.id,
@@ -36,21 +35,9 @@ async function searchShows(query) {
       image: s.show.image ? s.show.image.medium : missingImg
     }
   ))
-
-  console.log('getShows', getShows)
   
   return getShows
-  // return [
-  //   {
-  //     id: 1767,
-  //     name: "The Bletchley Circle",
-  //     summary: "<p><b>The Bletchley Circle</b> follows the journey of four ordinary women with extraordinary skills that helped to end World War II.</p><p>Set in 1952, Susan, Millie, Lucy and Jean have returned to their normal lives, modestly setting aside the part they played in producing crucial intelligence, which helped the Allies to victory and shortened the war. When Susan discovers a hidden code behind an unsolved murder she is met by skepticism from the police. She quickly realises she can only begin to crack the murders and bring the culprit to justice with her former friends.</p>",
-  //     image: "http://static.tvmaze.com/uploads/images/medium_portrait/147/369403.jpg"
-  //   },
-  // ]
 }
-
-
 
 /** Populate shows list:
  *     - given list of shows, add shows to DOM
@@ -78,7 +65,6 @@ function populateShows(shows) {
   }
 }
 
-
 /** Handle search form submission:
  *    - hide episodes area
  *    - get list of matching shows and show in shows list
@@ -98,7 +84,6 @@ $("#search-form").on("submit", async function handleSearch (evt) {
   populateShows(shows);
 });
 
-
 /** Given a show ID, return list of episodes:
  *      { id, name, season, number }
  */
@@ -110,7 +95,7 @@ async function getEpisodes(id) {
   const res = await axios.get(`http://api.tvmaze.com/shows/${id}/episodes`)
 
   // TODO: return array-of-episode-info, as described in docstring above
-  const getEpisodes = res.data.map(e => (
+  const episodes = res.data.map(e => (
     {
       id: e.id,
       name: e.name,
@@ -119,11 +104,31 @@ async function getEpisodes(id) {
     }
   ))
 
-  console.log('getEpisodes', getEpisodes)
-
-  return getEpisodes
+  return episodes
 }
 
 function populateEpisodes(episodes) {
+  const $episodesList = $("#episodes-list");
+  $episodesList.empty();
 
+  for (let episode of episodes) {
+    let $item = $(
+      `
+        <li>
+         ${episode.name} - (season: ${episode.season}, episode: ${episode.number})
+        </li>
+      `
+    );
+
+    $episodesList.append($item)
+  }
+
+  $('#episodes-area').show()
 }
+
+$('#shows-list').on('click', '.get-episodes', async function handleEpisodes(e) {
+  const showId = $(e.target).closest('.Show').data('show-id')
+  const episodes = await getEpisodes(showId)
+
+  populateEpisodes(episodes)
+})
