@@ -76,6 +76,23 @@ class StoryList {
   async addStory( /* user, newStory */) {
     // UNIMPLEMENTED: complete this function!
   }
+
+  async removeStory(user, storyId) {
+    await axios({
+      url: `${BASE_URL}/stories/${storyId}`,
+      method: 'DELETE',
+      data: { token: user.loginToken }
+    })
+
+    // repopulates stories list
+    this.stories = this.stories.filter(s => s.storyId !== storyId)
+
+    // repopulate user's own list
+    user.ownStories = user.ownStories.filter(s => s.storyId !== storyId)
+
+    // repopulate user's favorite list
+    user.favorites = user.favorites.filter(s => s.storyId !== storyId)
+  }
 }
 
 

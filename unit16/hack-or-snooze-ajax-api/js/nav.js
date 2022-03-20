@@ -35,9 +35,18 @@ function updateNavOnLogin() {
   $navUserProfile.text(`${currentUser.username}`).show();
 }
 
-// display submit form when user clicks navbar > submit
+// display submit form when user clicks 'navbar > submit'
 function navSubmitStoryClick() {
   $submitForm.show()
 }
 
 $navSubmitStory.on('click', navSubmitStoryClick)
+
+// display user's submitted stories on 'navbar > my stories' click
+function navMyStories() {
+  hidePageComponents()
+  putUserStoriesOnPage()
+  $myStories.show()
+}
+
+$navMyStories.on('click', navMyStories)

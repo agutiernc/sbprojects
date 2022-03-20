@@ -37,3 +37,7 @@
 .story-user {
   display: block;
 }
+
+.delete-btn {
+  cursor: pointer;
+}
