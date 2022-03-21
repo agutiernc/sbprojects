@@ -59,6 +59,28 @@ function starHTML(story, user) {
   `
 }
 
+async function submitNewStory(evt) {
+  evt.preventDefault()
+
+  // get input values
+  const author = $('#author').val()
+  const title = $('#title').val()
+  const url = $('#url').val()
+
+  const username = currentUser.username
+  const storyInfo = { author, title, url, username }
+
+  const story = await storyList.addStory(currentUser, storyInfo)
+
+  $allStoriesList.prepend( generateStoryMarkup(story) )
+
+  // after submit, reset input and hide form
+  $submitForm.trigger('reset')
+  $submitForm.slideUp('slow')
+}
+
+$submitForm.on('submit', submitNewStory)
+
 /** Gets list of stories from server, generates their HTML, and puts on page. */
 
 function putStoriesOnPage() {
@@ -128,7 +150,7 @@ async function deleteStory(evt) {
   await storyList.removeStory(currentUser, storyId)
 
   // repopulate user's story list
-  await putUserStoriesOnPage()
+  putUserStoriesOnPage()
 }
 
 $myStories.on('click', '.delete-btn', deleteStory)

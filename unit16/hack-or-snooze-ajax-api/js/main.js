@@ -12,16 +12,14 @@ const $storiesLists = $('.stories-list')
 
 const $loginForm = $("#login-form");
 const $signupForm = $("#signup-form");
+const $submitForm = $('#submit-form')
 
 const $navLogin = $("#nav-login");
 const $navUserProfile = $("#nav-user-profile");
 const $navLogOut = $("#nav-logout");
-
 const $navSubmitStory = $('#nav-submit-story')
 const $navMyStories = $('#nav-my-stories')
 const $navFavoriteStories = $('#nav-favorites')
-
-const $submitForm = $('#submit-form')
 
 const $userProfile = $('#user-profile')
 const $userContainer = $('#user-container')

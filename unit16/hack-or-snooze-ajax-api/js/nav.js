@@ -37,6 +37,8 @@ function updateNavOnLogin() {
 
 // display submit form when user clicks 'navbar > submit'
 function navSubmitStoryClick() {
+  hidePageComponents()
+  $allStoriesList.show()
   $submitForm.show()
 }
 
