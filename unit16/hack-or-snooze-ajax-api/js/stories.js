@@ -24,9 +24,12 @@ function generateStoryMarkup(story, showDeleteBtn = false) {
 
   const hostName = story.getHostName();
 
+  const showStar = Boolean(currentUser)
+
   return $(`
       <li id="${story.storyId}">
         ${showDeleteBtn ? deleteBtn() : ''}
+        ${showStar ? starHTML(story, currentUser) : ''}
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -41,6 +44,17 @@ function deleteBtn() {
   return `
     <span class='delete-btn'>
       <i class="fas fa-trash-alt"></i>
+    </span>
+  `
+}
+
+function starHTML(story, user) {
+  const isFavorite = user.isFavorite(story)
+  const starToggle = isFavorite ? 'fas' : 'far'
+
+  return `
+    <span class='star'>
+    <i class="${starToggle} fa-star"></i>
     </span>
   `
 }
@@ -74,6 +88,37 @@ function putUserStoriesOnPage() {
 
   $myStories.show()
 }
+
+function putFavoritesListOnPage() {
+  $favoritedStories.empty()
+
+  if (currentUser.favorites.length === 0) {
+    $favoritedStories.append('<p>No favorites added!</p>')
+  } else {
+    for (let fav of currentUser.favorites) {
+      $favoritedStories.append(generateStoryMarkup(fav))
+    }
+  }
+
+  $favoritedStories.show()
+}
+
+async function toggleStoryFavorite(evt) {
+  const storyId = $(evt.target).closest('li').attr('id')
+  const story = storyList.stories.find(s => s.storyId === storyId)
+
+  if ($(evt.target).hasClass('fas')) {
+    await currentUser.removeFavorite(story)
+
+    $(evt.target).closest('i').toggleClass('fas far')
+  } else {
+    await currentUser.addFavorite(story)
+
+    $(evt.target).closest('i').toggleClass('fas far')
+  }
+}
+
+$storiesLists.on('click', '.star', toggleStoryFavorite)
 
 async function deleteStory(evt) {
   // target story to delete

@@ -38,6 +38,7 @@
   display: block;
 }
 
-.delete-btn {
+.delete-btn,
+.star {
   cursor: pointer;
 }

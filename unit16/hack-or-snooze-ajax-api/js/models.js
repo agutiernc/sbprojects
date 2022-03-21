@@ -210,4 +210,31 @@ class User {
       return null;
     }
   }
+
+  async addFavorite(story) {
+    this.favorites.push(story)
+
+    await this.addOrRemoveFavorite('add', story)
+  }
+
+  async removeFavorite(story) {
+    this.favorites = this.favorites.filter(f => f.storyId !== story.storyId)
+
+    await this.addOrRemoveFavorite('remove', story)
+  }
+
+  async addOrRemoveFavorite(req, story) {
+    const token = this.loginToken
+    const method = req === 'add' ? 'POST' : 'DELETE'
+
+    await axios({
+      url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
+      method,
+      data: { token }
+    })
+  }
+
+  isFavorite(story) {
+    return this.favorites.some(s => s.storyId === story.storyId)
+  }
 }

@@ -58,3 +58,12 @@ function navProfileClick() {
 }
 
 $navUserProfile.on('click', navProfileClick)
+
+// display user's favorite stories when clicking 'navbar > favorites'
+function navFavoritesClick() {
+  hidePageComponents()
+  putFavoritesListOnPage()
+  $favoritedStories.show()
+}
+
+$navFavoriteStories.on('click', navFavoritesClick)
