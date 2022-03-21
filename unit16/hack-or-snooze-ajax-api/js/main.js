@@ -46,14 +46,11 @@ function hidePageComponents() {
 
 async function start() {
   console.debug("start");
-  hidePageComponents() // remove later?
+  hidePageComponents()
 
   // "Remember logged-in user" and log in, if credentials in localStorage
   await checkForRememberedUser();
   await getAndShowStoriesOnStart();
-
-  // $submitForm.hide() // hide submit form on page load
-  // $userProfile.hide() // hide user profile
 
   // if we got a logged-in user
   if (currentUser) updateUIOnUserLogin();
