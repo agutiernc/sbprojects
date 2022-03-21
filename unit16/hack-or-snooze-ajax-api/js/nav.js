@@ -50,3 +50,11 @@ function navMyStories() {
 }
 
 $navMyStories.on('click', navMyStories)
+
+// display user profile when clicking 'navbar > username'
+function navProfileClick() {
+  hidePageComponents()
+  $userProfile.show()
+}
+
+$navUserProfile.on('click', navProfileClick)

@@ -12,3 +12,8 @@
 .account-forms-container {
   padding-left: 20px;
 }
+
+#user-container {
+  margin: 10px 20px;
+  font-size: 14px;
+}
