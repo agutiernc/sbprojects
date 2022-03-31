@@ -27,3 +27,4 @@ def find_greater_numbers(nums):
                 count += 1
     
     return count
+    

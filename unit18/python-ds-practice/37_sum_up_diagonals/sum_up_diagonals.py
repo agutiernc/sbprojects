@@ -18,3 +18,24 @@ def sum_up_diagonals(matrix):
         >>> sum_up_diagonals(m2)
         30
     """
+    # if arr length == 2, then sum the arrays
+    # if more than 2 lists, then sum up first, and last items of lists
+    lst = []
+
+    for num in matrix:
+        lst.append(num[0])
+        lst.append(num[-1])
+
+    return sum(lst)
+
+
+m1 = [
+       [1,   2],
+       [30, 40],
+    ]
+
+m2 = [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9],
+    ]

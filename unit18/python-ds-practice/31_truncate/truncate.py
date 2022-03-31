@@ -1,8 +1,8 @@
 def truncate(phrase, n):
     """Return truncated-at-n-chars version of  phrase.
     
-    If the phrase is longer than, or the same size as, n make sure it ends with '...' and is no
-    longer than n.
+    If the phrase is longer than, or the same size as, n make sure it
+    ends with '...' and is no longer than n.
     
         >>> truncate("Hello World", 6)
         'Hel...'
@@ -24,3 +24,9 @@ def truncate(phrase, n):
         >>> truncate("Woah", 3)
         '...'
     """
+    if n > len(phrase):
+        return phrase
+    elif n < 3:
+        return 'Truncation must be at least 3 characters.'
+    else:
+        return phrase.replace(phrase[n - 3:], '...')
