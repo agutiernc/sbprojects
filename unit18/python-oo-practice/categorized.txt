@@ -1,0 +1,13 @@
+# Veggies
+
+kale
+parsnips
+carrot
+cauliflower
+
+# Fruits
+
+apple
+mango
+banana
+strawberry
