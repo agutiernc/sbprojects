@@ -26,6 +26,14 @@ def start_survey():
 def show_question(q_id):
     '''Display question'''
 
+    # prevent user from manipulating URL
+    if q_id > len(responses) or q_id > len(survey.questions):
+        return redirect(f'/questions/{len(responses)}')
+
+    # if user answered all questions, redirect to complete page
+    if len(responses) == len(survey.questions):
+        return redirect('/complete')
+
     question = survey.questions[q_id]
 
     return render_template('question.html', question=question)
@@ -54,11 +62,8 @@ def complete():
     print('from complete: ', responses)
     return render_template('complete.html')
 
-# make route to /questions/<list index>
-# create form with current question
-# if choices, then add radio buttons
-# after answering, form fires POST request to /answer
-#   - includes answer that user selected
+# prevent user from maniuplating url
+#   - if user changes question num, redirect to current question
 
 
 # get length of questions from satisfaction_survey.questions
