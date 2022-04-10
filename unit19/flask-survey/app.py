@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, request
 from flask_debugtoolbar import DebugToolbarExtension
 from surveys import satisfaction_survey as survey
 
@@ -29,6 +29,30 @@ def show_question(q_id):
     question = survey.questions[q_id]
 
     return render_template('question.html', question=question)
+
+@app.route('/answer', methods=['POST'])
+def handle_question():
+    '''Saves answer and redirects'''
+
+    # gets user's choice
+    choice = request.form['answer']
+
+    # add to responses list
+    responses.append(choice)
+    print('responses: ', responses)
+    
+    # check if there are more questions
+    if len(responses) == len(survey.questions):
+        return redirect('/complete')
+    else:
+        return redirect(f'/questions/{len(responses)}')
+
+
+@app.route('/complete')
+def complete():
+    '''Inform user that survey is done'''
+    print('from complete: ', responses)
+    return render_template('complete.html')
 
 # make route to /questions/<list index>
 # create form with current question
