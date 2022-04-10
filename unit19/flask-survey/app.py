@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, flash
 from flask_debugtoolbar import DebugToolbarExtension
 from surveys import satisfaction_survey as survey
 
@@ -28,10 +28,14 @@ def show_question(q_id):
 
     # prevent user from manipulating URL
     if q_id > len(responses) or q_id > len(survey.questions):
+        flash('Invalid question id. Please answer question before moving ahead.')
+
         return redirect(f'/questions/{len(responses)}')
 
     # if user answered all questions, redirect to complete page
     if len(responses) == len(survey.questions):
+        flash('All questions have been answered.')
+
         return redirect('/complete')
 
     question = survey.questions[q_id]
@@ -47,7 +51,6 @@ def handle_question():
 
     # add to responses list
     responses.append(choice)
-    print('responses: ', responses)
     
     # check if there are more questions
     if len(responses) == len(survey.questions):
@@ -59,20 +62,5 @@ def handle_question():
 @app.route('/complete')
 def complete():
     '''Inform user that survey is done'''
-    print('from complete: ', responses)
+
     return render_template('complete.html')
-
-# prevent user from maniuplating url
-#   - if user changes question num, redirect to current question
-
-
-# get length of questions from satisfaction_survey.questions
-#   - use it as list index
-
-# satisfaction_survey.questions[0].question
-#   - gets the question
-
-# Survey has 3 parameters:
-#   - title
-#   - instructions
-#   - questions
