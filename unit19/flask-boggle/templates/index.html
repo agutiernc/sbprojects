@@ -5,12 +5,30 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Boggle</title>
 </head>
 
 <body>
   <div class="container">
     <h1>Boggle!</h1>
+    
+    <!-- displays message to user -->
+    <div class="msg-container">
+      <p class="msg"></p>
+    </div>
+
+    <div class="form-container">
+      <form method="POST" class="verify-word">
+        <input
+          name="word" 
+          class="word" 
+          placeholder="Check for valid word"
+        >
+
+        <button id="submit">submit</button>
+      </form>
+    </div>
 
     <table id="boggle">
       <tbody>
@@ -24,6 +42,11 @@
       </tbody>
     </table>
   </div>
+
+
+  <script src="https://unpkg.com/jquery"></script>
+	<script src="https://unpkg.com/axios/dist/axios.js"></script>
+  <script src="/static/boggle.js"></script>
 </body>
 
 </html>

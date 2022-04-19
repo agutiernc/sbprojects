@@ -6,12 +6,6 @@
 /unit18/python-ds-practice/fs_3_three_odd_numbers
 /unit18/python-ds-practice/fs_4_reverse_vowels
 /unit18/python-ds-practice/fs_5_read_file_list
-unit19/flask-greet-calc/venv
-unit19/flask-greet-calc/__pycache__
-unit19/flask-greet-calc/greet/__pycache__
-unit19/flask-greet-calc/calc/__pycache__/app.cpython-39.pyc
-unit19/flask-greet-calc/calc/__pycache__/operations.cpython-39.pyc
-unit19/flask-greet-calc/calc/__pycache__/test.cpython-39.pyc
-unit19/flask-madlibs/basic/venv
 **/__pycache__
 **/venv
+/unit19/flask-boggle/templates/test.html
