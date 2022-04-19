@@ -1,3 +1,5 @@
+let score = 0
+
 async function handleSubmit(evt) {
   evt.preventDefault()
 
@@ -17,6 +19,8 @@ async function handleSubmit(evt) {
     showMessage(word, 'is not a valid word on this board')
   } else {
     showMessage(word, 'is a valid word!')
+
+    scoreGame(word)
   }
 
   $word.val('')
@@ -30,3 +34,11 @@ const $msg = $('.msg').hide()
 function showMessage(word, message) {
   return $msg.text(`${word} ${message}`).show().delay(3000).fadeOut('slow')
 }
+
+function scoreGame(word) {
+  score += word.length
+
+  return $('.score').text(score)
+}
+
+// score amount is equal to length of a word
