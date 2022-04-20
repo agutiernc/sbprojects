@@ -10,9 +10,9 @@ async function handleSubmit(evt) {
   }
 
   const $word = $('.word')
-
   let word = $word.val()
 
+  // check if word is valid from the server
   const res = await axios.get("/verify", { params: { word: word }});
 
   if (res.data.result === 'not-word') {
@@ -25,7 +25,7 @@ async function handleSubmit(evt) {
     scoreGame(word)
   }
 
-  $word.val('').focus()
+  $word.val('').focus() // clear input and add focus
 }
 
 $('.verify-word').on('submit', handleSubmit)
@@ -34,7 +34,7 @@ $('.verify-word').on('submit', handleSubmit)
 const $msg = $('.msg').hide()
 
 function showMessage(word, message) {
-  return $msg.text(`${word} ${message}`).show().delay(2000).fadeOut('slow')
+  return $msg.text(`${word} ${message}`).show().delay(3000).fadeOut('slow')
 }
 
 function scoreGame(word) {
@@ -53,6 +53,8 @@ function countDown() {
 
       $('.timer').text('Times up!')
       $('.verify-word :input').prop('disabled', true)
+
+      gameTracker()
     } else {
       startTimer = true
 
@@ -62,4 +64,17 @@ function countDown() {
 
     seconds -= 1
   }, 1000)
+}
+
+async function gameTracker() {
+  const res = await axios.post('/score', { score: score })
+
+  if (res.data.record) {
+    // display new high score if player achieves it
+    $('.high-score').text(`High Score: ${score}`)
+    
+    return showMessage(score, 'is a New Record!')
+  } else {
+    return showMessage(score, 'is the Final Score!')
+  }
 }
