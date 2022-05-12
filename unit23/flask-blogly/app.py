@@ -19,9 +19,22 @@ connect_db(app)
 # db.create_all()
 
 @app.route('/')
+def main_page():
+    return redirect('/users')
+
+@app.route('/users')
 def list_users():
     '''List all users in db'''
 
     users = User.query.all()
 
     return render_template('index.html', users=users)
+
+@app.route('/users/<int:user_id>')
+def show_user(user_id):
+    '''Display details about a user'''
+
+    user = User.query.get_or_404(user_id)
+
+    print('user info: ', user)
+    return render_template('show.html', user=user)
