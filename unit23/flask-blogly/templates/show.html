@@ -6,10 +6,10 @@
 
 <img src="{{ user.image_url }}" width="100" height="100">
 
-<button><a href="/users/{{ user.id }}/edit">Edit</a></button>
+<a href="/users/{{ user.id }}/edit"><button class="edit-btn">Edit</button></a>
 
 <form action="/users/{{ user.id }}/delete" method="POST">
-  <button>Delete</button>
+  <button class="delete-btn">Delete</button>
 </form>
 
 {% endblock %}

@@ -16,7 +16,6 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 debug = DebugToolbarExtension(app)
 
 connect_db(app)
-# db.create_all()
 
 @app.route('/')
 def main_page():
