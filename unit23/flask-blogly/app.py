@@ -20,6 +20,8 @@ connect_db(app)
 
 @app.route('/')
 def main_page():
+    '''Root redirects to users page '''
+
     return redirect('/users')
 
 @app.route('/users')
@@ -36,7 +38,6 @@ def show_user(user_id):
 
     user = User.query.get_or_404(user_id)
 
-    print('user info: ', user)
     return render_template('show.html', user=user)
 
 @app.route('/users/new')
@@ -49,14 +50,43 @@ def users_form():
 def create_user():
     '''New User creation form submission'''
 
+    # grab data from form
     f_name = request.form['first']
     l_name = request.form['last']
     img_url = request.form['url'] or None
 
+    # create new user for db
     new_user = User(first_name=f_name, last_name=l_name, image_url=img_url)
 
     # add to db
     db.session.add(new_user)
+    db.session.commit()
+
+    return redirect('/users')
+
+@app.route('/users/<int:user_id>/edit')
+def show_edit(user_id):
+    '''Display user info for edit page'''
+
+    # get user info
+    user = User.query.get_or_404(user_id)
+
+    return render_template('edit.html', user=user)
+
+@app.route('/users/<int:user_id>/edit', methods=['POST'])
+def edit_user(user_id):
+    '''Edit user info'''
+
+    # get user info
+    user = User.query.get_or_404(user_id)
+
+    # assign new or existing info to user
+    user.first_name = request.form['first']
+    user.last_name = request.form['last']
+    user.image_url = request.form['url'] or None
+
+    # add and commit user to DB
+    db.session.add(user)
     db.session.commit()
 
     return redirect('/users')
