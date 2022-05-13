@@ -38,3 +38,25 @@ def show_user(user_id):
 
     print('user info: ', user)
     return render_template('show.html', user=user)
+
+@app.route('/users/new')
+def users_form():
+    '''Display new users form'''
+
+    return render_template('/new.html')
+
+@app.route('/users/new', methods=['POST'])
+def create_user():
+    '''New User creation form submission'''
+
+    f_name = request.form['first']
+    l_name = request.form['last']
+    img_url = request.form['url'] or None
+
+    new_user = User(first_name=f_name, last_name=l_name, image_url=img_url)
+
+    # add to db
+    db.session.add(new_user)
+    db.session.commit()
+
+    return redirect('/users')
