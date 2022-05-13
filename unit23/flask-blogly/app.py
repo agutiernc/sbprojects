@@ -90,3 +90,17 @@ def edit_user(user_id):
     db.session.commit()
 
     return redirect('/users')
+
+@app.route('/users/<int:user_id>/delete', methods=['POST'])
+def delete_user(user_id):
+    '''Delete user from db'''
+
+    # get user
+    user = User.query.get_or_404(user_id)
+
+    # delete user and commit to db
+    db.session.delete(user)
+    db.session.commit()
+
+    return redirect('/')
+
