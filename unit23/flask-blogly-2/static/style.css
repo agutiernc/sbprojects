@@ -68,7 +68,7 @@ button {
   color: #fff;
 }
 
-.edit-btn {
+.edit-btn, .post-btn {
   background-color: dodgerblue;
 }
 
@@ -99,4 +99,23 @@ input {
   background-color: #e8e7e6;
   border-radius: 3px;
   outline: none;
+}
+
+.details-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  padding: 10px;
+  margin: 10px;
+}
+
+.posts-container {
+  margin: 20px 0 5px 50px;
+  padding: 20px;
+}
+
+.posts-list {
+  margin-top: 15px;
+  margin-left: 15px;
 }

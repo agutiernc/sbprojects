@@ -2,14 +2,36 @@
 
 {% block content %}
 
-<h2>{{ user.first_name }} {{ user.last_name }}</h2>
+<div class="details-container">
+  <div class="img-container">
+    <img src="{{ user.image_url }}" width="100" height="100">
+  </div>
 
-<img src="{{ user.image_url }}" width="100" height="100">
+  <div class="user-info">
+    <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+    
+    <a href="/users/{{ user.id }}/edit"><button class="edit-btn">Edit</button></a>
+  
+    <form action="/users/{{ user.id }}/delete" method="POST">
+      <button class="delete-btn">Delete</button>
+    </form>
+  </div>
+</div>
 
-<a href="/users/{{ user.id }}/edit"><button class="edit-btn">Edit</button></a>
+<div class="posts-container">
+  <h3>Posts</h3>
 
-<form action="/users/{{ user.id }}/delete" method="POST">
-  <button class="delete-btn">Delete</button>
-</form>
+  <ul class="posts-list">
+    {% for post in user.posts %}
+        <li>
+          {{ post.title }}
+        </li>
+    {% endfor %}
+  </ul>
+
+  <a href="/users/{{ user.id }}/posts/new">
+    <button class="post-btn">Add Post</button>
+  </a>
+</div>
 
 {% endblock %}
