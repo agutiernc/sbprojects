@@ -27,6 +27,7 @@ def main_page():
 def list_users():
     '''List all users in db'''
 
+    # get all users
     users = User.query.all()
 
     return render_template('index.html', users=users)
@@ -35,6 +36,7 @@ def list_users():
 def show_user(user_id):
     '''Display details about a user'''
 
+    # get user info
     user = User.query.get_or_404(user_id)
 
     return render_template('show.html', user=user)
@@ -94,7 +96,7 @@ def edit_user(user_id):
 def delete_user(user_id):
     '''Delete user from db'''
 
-    # get user
+    # get user info
     user = User.query.get_or_404(user_id)
 
     # delete user and commit to db
@@ -109,6 +111,7 @@ def delete_user(user_id):
 def show_post_form(user_id):
     '''Displays post form for a user'''
 
+    # get user info
     user = User.query.get_or_404(user_id)
 
     return render_template('/posts/new.html', user=user)
@@ -141,6 +144,7 @@ def add_post(user_id):
 def show_post(post_id):
     '''Display a post'''
 
+    # get post info
     post = Post.query.get_or_404(post_id)
 
     return render_template('/posts/show.html', post=post)
@@ -149,6 +153,7 @@ def show_post(post_id):
 def show_post_edit_form(post_id):
     '''Display form to edit post'''
 
+    # get post info
     post = Post.query.get_or_404(post_id)
 
     return render_template('/posts/edit.html', post=post)
@@ -172,3 +177,19 @@ def edit_post(post_id):
     flash(f"Post '{post.title}' was updated.")
 
     return redirect(f'/posts/{post_id}')
+
+@app.route('/posts/<int:post_id>/delete', methods=['POST'])
+def delete_post(post_id):
+    '''Delete post from db'''
+
+    # get post info
+    post = Post.query.get_or_404(post_id)
+
+    # delete user and commit to db
+    db.session.delete(post)
+    db.session.commit()
+
+    # inform user post was successfully deleted
+    flash(f"Post '{post.title}' was deleted.")
+
+    return redirect(f"/users/{post.user_id}")

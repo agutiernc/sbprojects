@@ -17,7 +17,11 @@
   <a href="/posts/{{ post.id }}/edit">
     <button class="edit-btn">Edit</button>
   </a>
-  <button class="delete-btn">Delete</button>
+
+  <form action="/posts/{{ post.id }}/delete" method="POST">
+    <button class="delete-btn">Delete</button>
+  </form>
+
 </div>
 
 
