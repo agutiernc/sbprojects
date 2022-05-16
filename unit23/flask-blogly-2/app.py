@@ -144,3 +144,31 @@ def show_post(post_id):
     post = Post.query.get_or_404(post_id)
 
     return render_template('/posts/show.html', post=post)
+
+@app.route('/posts/<int:post_id>/edit')
+def show_post_edit_form(post_id):
+    '''Display form to edit post'''
+
+    post = Post.query.get_or_404(post_id)
+
+    return render_template('/posts/edit.html', post=post)
+
+@app.route('/posts/<int:post_id>/edit', methods=['POST'])
+def edit_post(post_id):
+    '''Edit a post'''
+
+    # get post info
+    post = Post.query.get_or_404(post_id)
+
+    # grab data from form
+    post.title = request.form['title']
+    post.content = request.form['content']
+
+    # add and commit to db
+    db.session.add(post)
+    db.session.commit()
+
+    # inform user post was successfully updated
+    flash(f"Post '{post.title}' was updated.")
+
+    return redirect(f'/posts/{post_id}')
