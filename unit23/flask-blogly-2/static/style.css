@@ -12,7 +12,7 @@ body {
 
 .container {
   margin: 0 auto;
-  width: 400px;
+  width: 500px;
   border: 1px solid #b8b7b4;
   border-radius: 5px;
   padding: 20px;
@@ -118,4 +118,28 @@ input {
 .posts-list {
   margin-top: 15px;
   margin-left: 15px;
+}
+
+.post-content,
+.post-author {
+  margin: 25px 0 30px 20px;
+}
+
+.post-author {
+  font-style: italic;
+}
+
+.btn-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  margin: 5px;
+}
+
+.notification {
+  border-radius: 5px;
+  margin: 20px auto;
+  padding: 10px;
+  width: 600px;
 }
