@@ -1,0 +1,20 @@
+{% extends './base.html' %}
+
+{% block content %}
+
+<h2>{{ tag.name }}</h2>
+
+<div class="posts-list">
+  <ul>
+    {% for post in tag.posts %}
+        <li>
+          {{ post.title }}
+        </li>
+    {% endfor %}
+  </ul>
+</div>
+
+<button class="edit-btn">Edit</button>
+<button class="delete-btn">Delete</button>
+
+{% endblock %}

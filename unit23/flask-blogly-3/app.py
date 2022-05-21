@@ -2,7 +2,7 @@
 
 from flask import Flask, request, render_template, redirect, flash
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, User, Post
+from models import db, connect_db, User, Post, Tag, PostTag
 
 app = Flask(__name__)
 
@@ -193,3 +193,22 @@ def delete_post(post_id):
     flash(f"Post '{post.title}' was deleted.")
 
     return redirect(f"/users/{post.user_id}")
+
+# ==================- Tag routes -==============================
+
+@app.route('/tags')
+def list_tags():
+    '''List all tags in db'''
+
+    # get all tags
+    tags = Tag.query.all()
+
+    return render_template('/tags/show.html', tags=tags)
+
+@app.route('/tags/<int:tag_id>')
+def tag_details(tag_id):
+    '''Show list of posts with a certain tag.'''
+
+    tag = Tag.query.get_or_404(tag_id)
+
+    return render_template('/tags/details.html', tag=tag)
