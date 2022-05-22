@@ -237,3 +237,12 @@ def add_tag():
     flash(f'Tag "{new_tag.name}" was added.')
 
     return redirect('/tags')
+
+@app.route('/tags/<int:tag_id>/edit')
+def tags_edit_form(tag_id):
+    '''Displays form to edit tag name'''
+
+    # get tag info
+    tag = Tag.query.get_or_404(tag_id)
+
+    return render_template('/tags/edit.html', tag=tag)
