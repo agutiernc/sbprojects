@@ -246,3 +246,23 @@ def tags_edit_form(tag_id):
     tag = Tag.query.get_or_404(tag_id)
 
     return render_template('/tags/edit.html', tag=tag)
+
+
+@app.route('/tags/<int:tag_id>/edit', methods=["POST"])
+def edit_tag(tag_id):
+    '''Edit a tag.'''
+
+     # get tag info
+    tag = Tag.query.get_or_404(tag_id)
+
+    # get tag name from form
+    tag.name = request.form['name']
+
+    # add and commit tag to DB
+    db.session.add(tag)
+    db.session.commit()
+
+    # notify user that tag was edited successfully
+    flash(f'Tag "{tag.name}" was edited.')
+
+    return redirect('/tags')
