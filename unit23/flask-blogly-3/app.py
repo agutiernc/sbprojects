@@ -212,3 +212,28 @@ def tag_details(tag_id):
     tag = Tag.query.get_or_404(tag_id)
 
     return render_template('/tags/details.html', tag=tag)
+
+@app.route('/tags/new')
+def show_tag_form():
+    '''Displays form to create new tags'''
+
+    return render_template('/tags/new.html')
+
+@app.route('/tags/new', methods=['POST'])
+def add_tag():
+    '''Create a new tag in tags form'''
+
+    # get tag name from form
+    tag = request.form['name']
+
+    # add data to class
+    new_tag = Tag(name=tag)
+
+    # add & commit new tag to db
+    db.session.add(new_tag)
+    db.session.commit()
+
+    # notify user that tag was added successfully
+    flash(f'Tag "{new_tag.name}" was added.')
+
+    return redirect('/tags')

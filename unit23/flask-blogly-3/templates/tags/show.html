@@ -8,12 +8,17 @@
   <ul>
     {% for tag in tags %}
       <li>
-        {{ tag.name }}
+        <a href="/tags/{{ tag.id }}">
+          {{ tag.name }}
+        </a>
       </li>
     {% endfor %}
   </ul>
 </div>
 
-<button class="add-btn">Add Tag</button>
+<a href="/tags/new">
+  <button class="add-btn">Add Tag</button>
+</a>
+
 
 {% endblock %}
