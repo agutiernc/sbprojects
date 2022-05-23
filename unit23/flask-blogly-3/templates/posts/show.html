@@ -8,7 +8,23 @@
 
 <p class="post-author">
   By {{ post.user.first_name }} {{ post.user.last_name }}
+  on {{ post.created_at.strftime('%a - %b %d %Y, %I:%M %p') }}
 </p>
+
+<div class="tags-row-container">
+  <span>Tags:</span>
+
+  <ul class="tag-row">
+    {% for tag in post.tags %}
+        <li>
+          <a href="/tags/{{ tag.id }}">
+            {{ tag.name }}
+          </a>
+        </li>
+    {% endfor %}
+  </ul>
+
+</div>
 
 <div class="btn-container">
   <a href="/users/{{ post.user.id }}">
