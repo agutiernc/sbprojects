@@ -13,6 +13,21 @@
     Content:
     <textarea name="content" cols="30" rows="5">{{ post.content }}</textarea>
   </p>
+
+  <div class="tags-check-boxes">
+    Tags:
+      {% for tag in tags %}
+          <input 
+            type="checkbox" 
+            name="tags"
+            id="tag_{{ tag.id }}"
+            value="{{ tag.id }}"
+            {{ "checked" if tag in post.tags }}
+          >
+          <label for="tag_{{ tag.id }}">{{ tag.name }}</label>
+      {% endfor %}
+  </div>
+
   <button class="edit-btn">Edit</button>
 </form>
 

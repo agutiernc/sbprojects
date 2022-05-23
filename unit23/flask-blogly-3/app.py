@@ -130,7 +130,7 @@ def add_post(user_id):
      # grab data from form
     title = request.form['title']
     content = request.form['content']
-    
+
     tag_ids = [int(num) for num in request.form.getlist('tags')]
     tags = Tag.query.filter(Tag.id.in_(tag_ids)).all()
 
@@ -162,7 +162,10 @@ def show_post_edit_form(post_id):
     # get post info
     post = Post.query.get_or_404(post_id)
 
-    return render_template('/posts/edit.html', post=post)
+    # get available tags
+    tags = Tag.query.all()
+
+    return render_template('/posts/edit.html', post=post, tags=tags)
 
 @app.route('/posts/<int:post_id>/edit', methods=['POST'])
 def edit_post(post_id):
@@ -174,6 +177,9 @@ def edit_post(post_id):
     # grab data from form
     post.title = request.form['title']
     post.content = request.form['content']
+
+    tag_ids = [int(num) for num in request.form.getlist('tags')]
+    post.tags = Tag.query.filter(Tag.id.in_(tag_ids)).all()
 
     # add and commit to db
     db.session.add(post)
