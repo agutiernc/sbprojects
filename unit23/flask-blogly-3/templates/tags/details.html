@@ -18,6 +18,11 @@
   <button class="edit-btn">Edit</button>
 </a>
 
-<button class="delete-btn">Delete</button>
+<form action="/tags/{{ tag.id }}/delete" method="POST">
+  <button class="delete-btn">
+    Delete
+  </button>
+</form>
+
 
 {% endblock %}

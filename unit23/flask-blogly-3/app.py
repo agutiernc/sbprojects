@@ -266,3 +266,19 @@ def edit_tag(tag_id):
     flash(f'Tag "{tag.name}" was edited.')
 
     return redirect('/tags')
+
+@app.route('/tags/<int:tag_id>/delete', methods=['POST'])
+def delete_tag(tag_id):
+    '''Delete a tag from db'''
+
+    # get tag info
+    tag = Tag.query.get_or_404(tag_id)
+
+    # delete tag and commit to db
+    db.session.delete(tag)
+    db.session.commit()
+
+    # inform user post was successfully deleted
+    flash(f"Tag '{tag.name}' was deleted.")
+
+    return redirect("/tags")
