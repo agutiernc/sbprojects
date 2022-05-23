@@ -114,7 +114,10 @@ def show_post_form(user_id):
     # get user info
     user = User.query.get_or_404(user_id)
 
-    return render_template('/posts/new.html', user=user)
+    # get available tags
+    tags = Tag.query.all()
+
+    return render_template('/posts/new.html', user=user, tags=tags)
 
 
 @app.route('/users/<int:user_id>/posts/new', methods=['POST'])
@@ -127,9 +130,12 @@ def add_post(user_id):
      # grab data from form
     title = request.form['title']
     content = request.form['content']
+    
+    tag_ids = [int(num) for num in request.form.getlist('tags')]
+    tags = Tag.query.filter(Tag.id.in_(tag_ids)).all()
 
     # add data to class
-    new_post = Post(title=title, content=content, user=user)
+    new_post = Post(title=title, content=content, user=user, tags=tags)
 
     # add & commit to db
     db.session.add(new_post)
