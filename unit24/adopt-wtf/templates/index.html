@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Pets</h1>
+
+<div class="row">
+  {% for pet in pets %}
+      <div class="col">
+        <img src="{{ pet.photo_url }}" class="img-thumbnail">
+        <p>
+          {{ pet.name }} is 
+          {% if pet.available %}
+            <span class="fw-bold">available</span>!
+          {% else %}
+            not available!
+          {% endif %}
+        </p>
+      </div>
+  {% endfor %}
+</div>
+
+<button type="button" class="btn btn-secondary">Add a Pet</button>
+
+{% endblock %}
+
+<!-- add bold to available -->
