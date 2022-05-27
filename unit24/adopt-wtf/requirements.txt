@@ -4,6 +4,7 @@ Click==7.0
 Flask==1.1.1
 Flask-DebugToolbar==0.13.1
 Flask-SQLAlchemy==2.5.1
+Flask-WTF==1.0.1
 greenlet==1.1.2
 itsdangerous==1.1.0
 Jinja2==2.10.3
@@ -12,3 +13,4 @@ psycopg2-binary==2.9.3
 pycodestyle==2.5.0
 SQLAlchemy==1.4.36
 Werkzeug==0.16.0
+WTForms==3.0.1

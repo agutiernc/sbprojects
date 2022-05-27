@@ -4,7 +4,7 @@
 
 <h1>Pets</h1>
 
-<div class="row">
+<div class="row row-cols-4">
   {% for pet in pets %}
       <div class="col">
         <img src="{{ pet.photo_url }}" class="img-thumbnail">
@@ -20,8 +20,8 @@
   {% endfor %}
 </div>
 
-<button type="button" class="btn btn-secondary">Add a Pet</button>
-
+<!-- <button type="button" class="btn btn-secondary">Add a Pet</button> -->
+<a class="btn btn-secondary" href="/add" role="button">Add a Pet</a>
 {% endblock %}
 
 <!-- add bold to available -->
