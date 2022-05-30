@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2 class="text-center mt-5">Pet Details</h2>
+<div class="card mx-auto text-left mt-4" style="width: 20rem;">
+  <img src="{{ pet.photo_url }}" class="card-img-top">
+  <div class="card-body">
+    <h3 class="card-title">{{ pet.name }}</h3>
+    <ul>
+      <li>Species: {{ pet.species }}</li>
+      <li>Age: {{ pet.age if pet.age }}</li>
+    </ul>
+    
+  </div>
+</div>
+
+<div class="container">
+  <h3 class="text-center mt-4">Edit Pet</h3>
+
+  <div class="row justify-content-center mx-auto w-50 mb-5">
+    <form method="POST">
+
+      {{ form.hidden_tag() }}
+
+      {% for field in form
+          if field.widget.input_type != 'hidden' %}
+
+          <p>
+            {{ field.label(class_='col-sm-2 col-form-label') }}
+            {{ field(class_='form-control') }}
+
+            {% for error in field.errors %}
+              {{ error }}
+            {% endfor %}
+          </p>
+
+      {% endfor %}
+
+      <button class="btn btn-secondary" type="submit">Edit Pet</button>
+    </form>
+  </div>
+</div>
+
+
+{% endblock %}
