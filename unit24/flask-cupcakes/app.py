@@ -1,4 +1,5 @@
 """Flask app for Cupcakes"""
+
 from flask import Flask, jsonify, render_template, request
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, Cupcake
@@ -61,3 +62,36 @@ def add_cupcake():
     response_json = jsonify(cupcake=new_cupcake.to_dict())
 
     return (response_json, 201)
+
+@app.route('/api/cupcakes/<int:cc_id>', methods=['PATCH'])
+def update_cupcake(cc_id):
+    '''Update an existing cupcake's data.'''
+
+    data = request.json
+
+    # get specific cupcake
+    cc = Cupcake.query.get_or_404(cc_id)
+
+    # update whichever fields were provided
+    cc.flavor = data.get('flavor', cc.flavor)
+    cc.size = data.get('size', cc.size)
+    cc.rating = data.get('rating', cc.rating)
+    cc.image = data.get('image', cc.image)
+
+    # commit updated cupcake to db
+    db.session.commit()
+
+    return jsonify(cupcake=cc.to_dict())
+
+@app.route('/api/cupcakes/<int:cc_id>', methods=['DELETE'])
+def delete_cupcake(cc_id):
+    '''Delete a specific cupcake.'''
+
+    # get specific cupcake
+    cc = Cupcake.query.get_or_404(cc_id)
+
+    # delete and commit in db
+    db.session.delete(cc)
+    db.session.commit()
+
+    return jsonify(message='Deleted')
