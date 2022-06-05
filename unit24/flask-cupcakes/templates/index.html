@@ -9,8 +9,23 @@
   </ul>
 </div>
 
-<div class="form-container">
+<div class="form-container mt-3">
+  <h3>Add new cupcake</h3>
+  <form class="cupcake-form mt-4" method="POST">
+      <label class="form-label">Flavor:</label>
+      <input type="text" class="form-control" name="flavor" id="form-flavor">
 
+      <label class="form-label">Size:</label>
+      <input type="text" class="form-control" name="size" id="form-size">
+
+      <label class="form-label">Rating:</label>
+      <input type="text" class="form-control" name="rating" id="form-rating" min="1" max="10">
+
+      <label class="form-label">Image URL:</label>
+      <input type="text" class="form-control" name="image" id="form-image">
+
+    <button class="btn btn-primary mt-3">Add Cupcake</button>
+  </form>
 </div>
 
 {% endblock %}

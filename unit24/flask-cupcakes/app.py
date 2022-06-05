@@ -3,7 +3,6 @@
 from flask import Flask, jsonify, render_template, request
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, Cupcake
-import requests
 
 app = Flask(__name__)
 
