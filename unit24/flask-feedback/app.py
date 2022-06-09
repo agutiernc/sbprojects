@@ -93,3 +93,13 @@ def secret_page():
         return redirect('/login')
 
     return render_template('secret.html')
+
+@app.route('/logout')
+def logout_user():
+    '''Logout user and remove from session'''
+
+    session.pop('username')
+
+    flash('Sucessfully logged out!')
+
+    return redirect('/')
