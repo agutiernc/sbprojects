@@ -12,13 +12,27 @@
       <li>First Name: {{ user.first_name }}</li>
       <li>Last Name: {{ user.last_name }}</li>
       <li>Email: {{ user.email }}</li>
+      <li>id: {{ user.id }}</li>
     </ul>
     
   </div>
 </div>
 
-<a href="/logout">
-  <button class="btn btn-secondary mt-3">Logout</button>
-</a>
+<div class="d-flex flex-row mt-3 px-2">
+  <a href="/logout">
+    <button class="btn btn-secondary me-5">Logout</button>
+  </a>
+
+  <form>
+    <button 
+      type="submit" 
+      class="btn btn-danger"
+      formmethod="POST"
+      formaction="/users/{{ user.username }}/delete"
+    >
+      Delete account?
+    </button>
+  </form>
+</div>
 
 {% endblock %}

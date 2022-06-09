@@ -1,6 +1,6 @@
 from flask import Flask, redirect, render_template, session, flash
 from flask_debugtoolbar import DebugToolbarExtension
-from models import connect_db, db, User
+from models import connect_db, db, User, Feedback
 from forms import UserForm, LoginForm
 from sqlalchemy.exc import IntegrityError
 
@@ -55,7 +55,7 @@ def register_user():
         # Let user know that they are registered
         flash('Thanks for registering!')
 
-        return redirect('/secret')
+        return redirect(f'/users/{username}')
     else:
         return render_template('/users/register.html', form=form)
 
@@ -107,3 +107,27 @@ def show_user(username):
     user = User.query.filter_by(username=username).first()
 
     return render_template('users/show.html', user=user)
+
+@app.route('/users/<username>/delete', methods=['POST'])
+def delete_user(username):
+    '''Remove the user from the database.'''
+
+    if 'username' not in session or username != session['username']:
+        flash('Please login first!')
+
+        return redirect('/login')
+
+    # get user info
+    user = User.query.filter_by(username=username).first()
+
+    # delete user from db
+    db.session.delete(user)
+    db.session.commit()
+
+    # remove user from session
+    session.pop('username')
+
+    # notify deletion of user
+    flash('User account deleted!')
+
+    return redirect('/')

@@ -1,6 +1,6 @@
 '''Seed file to make sample data for users db'''
 
-from models import User, db
+from models import User, Feedback, db
 from app import app
 
 # create all tables
