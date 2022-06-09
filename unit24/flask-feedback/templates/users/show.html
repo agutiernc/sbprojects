@@ -1,0 +1,24 @@
+{% extends './base.html' %}
+
+{% block content %}
+
+<h2 class="my-4">User Info</h2>
+
+<div class="card text-left mt-3" style="width: 20rem;">
+  <div class="card-body">
+    <h3 class="card-title text-center">{{ user.username }}</h3>
+
+    <ul>
+      <li>First Name: {{ user.first_name }}</li>
+      <li>Last Name: {{ user.last_name }}</li>
+      <li>Email: {{ user.email }}</li>
+    </ul>
+    
+  </div>
+</div>
+
+<a href="/logout">
+  <button class="btn btn-secondary mt-3">Logout</button>
+</a>
+
+{% endblock %}

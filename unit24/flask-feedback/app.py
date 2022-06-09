@@ -78,21 +78,11 @@ def login_user():
             #add user to session when logged in
             session['username'] = user.username
 
-            return redirect('/secret')
+            return redirect(f'/users/{user.username}')
         else:
             form.username.errors = ['Invalid username/password']
     
     return render_template('/users/login.html', form=form)
-
-@app.route('/secret')
-def secret_page():
-
-    if 'username' not in session:
-        flash('Please login first!')
-
-        return redirect('/login')
-
-    return render_template('secret.html')
 
 @app.route('/logout')
 def logout_user():
@@ -103,3 +93,17 @@ def logout_user():
     flash('Sucessfully logged out!')
 
     return redirect('/')
+
+@app.route('/users/<username>')
+def show_user(username):
+    '''Render user's info.'''
+
+    if 'username' not in session or username != session['username']:
+        flash('Please login first!')
+
+        return redirect('/login')
+
+    # get user info
+    user = User.query.filter_by(username=username).first()
+
+    return render_template('users/show.html', user=user)
