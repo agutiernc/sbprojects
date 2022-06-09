@@ -32,3 +32,9 @@ class UserForm(FlaskForm):
                         InputRequired(),
                         Length(min=3, max=30)
                     ])
+
+class LoginForm(FlaskForm):
+    '''Login Form'''
+
+    username = StringField('Username', validators=[InputRequired()])
+    password = PasswordField('Password', validators=[InputRequired()])
