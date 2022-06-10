@@ -191,4 +191,25 @@ def edit_feedback(feedback_id):
 
         return redirect(f'/users/{fdbk.username}')
     else:
-        return render_template('/feedback/edit.html', form=form)
+        return render_template('/feedback/edit.html', form=form, fdbk=fdbk)
+
+@app.route('/feedback/<int:feedback_id>/delete', methods=['POST'])
+def delete_feedback(feedback_id):
+    '''Remove the user from the database.'''
+
+    # Get feedback data
+    fdbk = Feedback.query.get_or_404(feedback_id)
+
+    if 'username' not in session or fdbk.username != session['username']:
+        flash('Unauthorized access: Please login first!')
+
+        return redirect('/login')
+
+    db.session.delete(fdbk)
+    db.session.commit()
+
+    flash('Feedback has been deleted!')
+
+    return redirect(f'/users/{fdbk.username}')
+
+    

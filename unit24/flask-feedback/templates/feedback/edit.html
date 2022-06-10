@@ -26,7 +26,18 @@
 
       {% endfor %}
 
-      <button class="btn btn-primary" type="submit">Edit</button>
+      <button class="btn btn-primary ms-3" type="submit">Edit</button>
+
+      <!-- Delete Feedback -->
+      <button 
+        type="submit" 
+        class="btn btn-danger ms-4"
+        formmethod="POST"
+        formaction="/feedback/{{ fdbk.id }}/delete"
+      >
+        Delete
+      </button>
+      
     </form>
   </div>
 </div>
