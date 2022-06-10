@@ -1,7 +1,7 @@
 from flask import Flask, redirect, render_template, session, flash
 from flask_debugtoolbar import DebugToolbarExtension
 from models import connect_db, db, User, Feedback
-from forms import UserForm, LoginForm
+from forms import UserForm, LoginForm, FeedbackForm
 from sqlalchemy.exc import IntegrityError
 
 app = Flask(__name__)
@@ -131,3 +131,35 @@ def delete_user(username):
     flash('User account deleted!')
 
     return redirect('/')
+
+
+# ======= FEEDBACK routes ==========
+
+@app.route('/users/<username>/feedback/add', methods=['GET', 'POST'])
+def user_feedback(username):
+    '''Display and process user feedback form.'''
+
+    if 'username' not in session or username != session['username']:
+        flash('Please login first!')
+
+        return redirect('/login')
+
+    form = FeedbackForm()
+
+    if form.validate_on_submit():
+        title = form.title.data
+        content = form.content.data
+
+        # add data to Feedback
+        new_fdbk = Feedback(title=title, content=content, username=username)
+
+        # add and commit feedback to db
+        db.session.add(new_fdbk)
+        db.session.commit()
+
+        # notify if feedback successfully added
+        flash('Feedback added!')
+
+        return redirect(f'/users/{new_fdbk.username}')
+    else:
+        return render_template('/feedback/new.html', form=form)

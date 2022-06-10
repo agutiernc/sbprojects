@@ -18,9 +18,15 @@
   </div>
 </div>
 
-<div class="d-flex flex-row mt-3 px-2">
+<!-- buttons -->
+
+<div class="d-flex flex-row mt-5 px-2">
   <a href="/logout">
     <button class="btn btn-secondary me-5">Logout</button>
+  </a>
+
+  <a href="//users/{{ user.first_name }}/feedback/add">
+    <button class="btn btn-primary me-5">Add Feedback</button>
   </a>
 
   <form>
@@ -34,5 +40,22 @@
     </button>
   </form>
 </div>
+
+<!-- feedback list -->
+
+<div class="fdbk-container mt-5">
+  <h3>Your Feedback</h3>
+
+  <ul>
+    {% for fdbk in user.feedback %}
+        <li>
+          <a href="/feedback/{{ fdbk.id }}/update" class="text-decoration-none">
+            {{ fdbk.title }}
+          </a>
+        </li>
+    {% endfor %}
+  </ul>
+</div>
+
 
 {% endblock %}
