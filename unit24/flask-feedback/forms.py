@@ -43,4 +43,8 @@ class FeedbackForm(FlaskForm):
     '''Feedback form.'''
 
     title = StringField('Title', validators=[InputRequired(), Length(max=100)])
-    content = TextAreaField('Content', validators=[InputRequired()])
+
+    content = TextAreaField('Content', 
+                    render_kw={'class': 'form-control', 'rows': 5},
+                    validators=[InputRequired()]
+                )

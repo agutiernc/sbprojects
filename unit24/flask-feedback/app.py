@@ -163,3 +163,32 @@ def user_feedback(username):
         return redirect(f'/users/{new_fdbk.username}')
     else:
         return render_template('/feedback/new.html', form=form)
+
+@app.route('/feedback/<int:feedback_id>/update', methods=['GET', 'POST'])
+def edit_feedback(feedback_id):
+    '''Render and process form for updating specific feedback.'''
+
+    # Get feedback data
+    fdbk = Feedback.query.get_or_404(feedback_id)
+
+    if 'username' not in session or fdbk.username != session['username']:
+        flash('Unauthorized access: Please login first!')
+
+        return redirect('/login')
+
+    # get existing form data
+    form = FeedbackForm(obj=fdbk)
+    
+    if form.validate_on_submit():
+        fdbk.title = form.title.data
+        fdbk.content = form.content.data
+
+        # commit new data to database
+        db.session.commit()
+
+        # notify successful update
+        flash('Feedback has been updated!')
+
+        return redirect(f'/users/{fdbk.username}')
+    else:
+        return render_template('/feedback/edit.html', form=form)
