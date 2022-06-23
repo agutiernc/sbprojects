@@ -57,7 +57,9 @@
                 btn-sm 
                 {{'btn-primary' if msg.id in likes else 'btn-secondary'}}"
               >
-                <i class="fa fa-thumbs-up"></i> 
+                <i class="
+                  {{ 'fa fa-star' if msg in g.user.likes else 'fa fa-thumbs-up'}}"
+                ></i> 
               </button>
             </form>
           </li>

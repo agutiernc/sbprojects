@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, render_template, request, flash, redirect, session, g
+from flask import Flask, render_template, request, flash, redirect, session, g, abort
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
@@ -18,7 +18,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = (
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
-app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
+
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "it's a secret")
 toolbar = DebugToolbarExtension(app)
 
@@ -75,10 +77,12 @@ def signup():
                 email=form.email.data,
                 image_url=form.image_url.data or User.image_url.default.arg,
             )
+
             db.session.commit()
 
         except IntegrityError:
             flash("Username already taken", 'danger')
+
             return render_template('users/signup.html', form=form)
 
         do_login(user)
@@ -101,7 +105,9 @@ def login():
 
         if user:
             do_login(user)
+
             flash(f"Hello, {user.username}!", "success")
+
             return redirect("/")
 
         flash("Invalid credentials.", 'danger')
@@ -155,6 +161,7 @@ def users_show(user_id):
                 .order_by(Message.timestamp.desc())
                 .limit(100)
                 .all())
+
     return render_template('users/show.html', user=user, messages=messages)
 
 
@@ -164,9 +171,11 @@ def show_following(user_id):
 
     if not g.user:
         flash("Access unauthorized.", "danger")
+
         return redirect("/")
 
     user = User.query.get_or_404(user_id)
+
     return render_template('users/following.html', user=user)
 
 
@@ -176,9 +185,11 @@ def users_followers(user_id):
 
     if not g.user:
         flash("Access unauthorized.", "danger")
+
         return redirect("/")
 
     user = User.query.get_or_404(user_id)
+
     return render_template('users/followers.html', user=user)
 
 
@@ -188,10 +199,13 @@ def add_follow(follow_id):
 
     if not g.user:
         flash("Access unauthorized.", "danger")
+
         return redirect("/")
 
     followed_user = User.query.get_or_404(follow_id)
+
     g.user.following.append(followed_user)
+
     db.session.commit()
 
     return redirect(f"/users/{g.user.id}/following")
@@ -203,10 +217,13 @@ def stop_following(follow_id):
 
     if not g.user:
         flash("Access unauthorized.", "danger")
+
         return redirect("/")
 
     followed_user = User.query.get(follow_id)
+
     g.user.following.remove(followed_user)
+
     db.session.commit()
 
     return redirect(f"/users/{g.user.id}/following")
@@ -216,7 +233,7 @@ def stop_following(follow_id):
 def profile():
     """Update profile for current user."""
 
-    # IMPLEMENT THIS
+    # IMPLEMENT THIS - DONE
 
     if not g.user:
         flash("Access unauthorized.", "danger")
@@ -230,8 +247,8 @@ def profile():
         g.user.username = form.username.data
         g.user.email = form.email.data
         g.user.location = form.location.data
-        g.user.image_url = form.image_url.data
-        g.user.header_image_url = form.header_image_url.data
+        g.user.image_url = form.image_url.data or "/static/images/default-pic.png"
+        g.user.header_image_url = form.header_image_url.data or "/static/images/warbler-hero.jpg"
         g.user.bio = form.bio.data
         password = form.password.data
 
@@ -257,6 +274,7 @@ def delete_user():
 
     if not g.user:
         flash("Access unauthorized.", "danger")
+
         return redirect("/")
 
     do_logout()
@@ -265,6 +283,51 @@ def delete_user():
     db.session.commit()
 
     return redirect("/signup")
+
+##############################################################################
+# Likes routes:
+
+@app.route('/users/add_like/<int:msg_id>', methods=['POST'])
+def add_like(msg_id):
+    '''Let current user like/dislike a message.'''
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+
+        return redirect("/")
+
+    # get liked message data
+    liked_msg = Message.query.get(msg_id)
+
+    # current user can't like their own message
+    if liked_msg.user_id == g.user.id:
+        return abort(403)
+
+    # remove liked message if in user's likes, else add it
+    if liked_msg in g.user.likes:
+        g.user.likes.remove(liked_msg)
+    else:
+        g.user.likes.append(liked_msg)
+    
+    # commit to db
+    db.session.commit()
+
+    return redirect('/')
+
+
+@app.route('/users/<int:user_id>/likes')
+def show_likes(user_id):
+    '''Display all user's liked messages.'''
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+
+        return redirect("/")
+
+    # get user info
+    user = User.query.get_or_404(user_id)
+
+    return render_template('/users/likes.html', user=user, likes=user.likes)
 
 
 ##############################################################################
@@ -279,13 +342,16 @@ def messages_add():
 
     if not g.user:
         flash("Access unauthorized.", "danger")
+
         return redirect("/")
 
     form = MessageForm()
 
     if form.validate_on_submit():
         msg = Message(text=form.text.data)
+
         g.user.messages.append(msg)
+
         db.session.commit()
 
         return redirect(f"/users/{g.user.id}")
@@ -298,6 +364,7 @@ def messages_show(message_id):
     """Show a message."""
 
     msg = Message.query.get(message_id)
+
     return render_template('messages/show.html', message=msg)
 
 
@@ -307,9 +374,11 @@ def messages_destroy(message_id):
 
     if not g.user:
         flash("Access unauthorized.", "danger")
+
         return redirect("/")
 
     msg = Message.query.get(message_id)
+
     db.session.delete(msg)
     db.session.commit()
 
@@ -360,4 +429,5 @@ def add_header(req):
     req.headers["Pragma"] = "no-cache"
     req.headers["Expires"] = "0"
     req.headers['Cache-Control'] = 'public, max-age=0'
+
     return req
