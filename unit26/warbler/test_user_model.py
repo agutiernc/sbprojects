@@ -28,7 +28,7 @@ from app import app
 
 
 class UserModelTestCase(TestCase):
-    """Test views for messages."""
+    """Tests model for User."""
 
     def setUp(self):
         """Create test client, add sample data."""
