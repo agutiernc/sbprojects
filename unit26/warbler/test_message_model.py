@@ -54,7 +54,6 @@ class MessageModelTestCase(TestCase):
     def test_message_likes(self):
         '''Test if message has any likes.'''
 
-        # make messages 1 and 2
         msg = Message(text='This was liked!', user_id=self.u1.id)
         
         db.session.add(msg)
@@ -66,6 +65,8 @@ class MessageModelTestCase(TestCase):
 
         db.session.commit()
 
-        liked_msg = Likes.query.filter()
+        liked_msg = Likes.query.filter(Likes.user_id == user.id).all()
 
+        self.assertEqual(len(liked_msg), 1)
+        self.assertEqual(liked_msg[0].message_id, msg.id)
 
