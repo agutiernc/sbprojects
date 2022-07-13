@@ -25,3 +25,4 @@ let arr = [...Array(4)].map(() => $.getJSON(`${BASE_URL}/${FAV_NUM}?json`))
 
 Promise.all(arr)
   .then(data => data.forEach(d => $('body').append(`<p>${d.text}</p>`)) )
+  .catch(err => console.log(err))
