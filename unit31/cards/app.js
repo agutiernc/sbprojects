@@ -45,3 +45,24 @@ $.getJSON(`${BASE_URL}/deck/new/draw/?count=1`)
     page that will let you draw a card. Every time you click the button, display
     a new card, until there are no cards left in the deck.
 */
+
+let deckID = null
+
+// On load or reload, create new deck and get deck ID
+$.getJSON(`${BASE_URL}/deck/new/shuffle`)
+  .then(data => {
+    deckID = data.deck_id
+  })
+
+$('button').click( function() {
+
+  $.getJSON(`${BASE_URL}/deck/${deckID}/draw/`)
+    .then(data => {
+      let cardImgURL = data.cards[0].image
+      
+      $('img').attr('src', `${cardImgURL}`)
+
+      
+      if (data.remaining === 0) $('button').remove() 
+    })
+})
