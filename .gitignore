@@ -10,3 +10,4 @@
 **/venv
 /unit19/flask-boggle/templates/test.html
 **/crud.sql
+**/node_modules

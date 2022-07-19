@@ -1,0 +1,11 @@
+{
+  "name": "nodeex",
+  "version": "1.0.0",
+  "description": "31.4 Node exercise",
+  "main": "step1.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alfonso",
+  "license": "MIT"
+}
