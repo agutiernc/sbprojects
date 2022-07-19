@@ -20,6 +20,7 @@ async function webCat(url) {
     console.log(res.data)
   } catch (err) {
     console.log(`Error fetching ${url}: ${err}`)
+    process.exit(1)
   }
 }
 
