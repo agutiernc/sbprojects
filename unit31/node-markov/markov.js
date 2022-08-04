@@ -37,15 +37,6 @@ class MarkovMachine {
   /** return random text from chains */
 
   makeText(numWords = 100) {
-    /** TODO
-     * get keys into an array
-     * grab a random key
-     * loop through numWords as long as numWords is greater than output and "key" aren't null
-     *    push a key into output array
-     *    get a random key's value from this.chains
-         return output array - join it
-     **/
-
     const keys = Object.keys(this.chains)
     let randomKey = MarkovMachine.randomItem(keys)
     let output = []
