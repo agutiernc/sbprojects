@@ -16,9 +16,6 @@ class MarkovMachine {
    *  for text of "the cat in the hat", chains will be
    *  {"the": ["cat", "hat"], "cat": ["in"], "in": ["the"], "hat": [null]} 
    * 
-   *  for each word, get the next word and add to array/object
-   * 
-   *  if next word is next, then add to array
    * */
   
   makeChains() {
@@ -41,13 +38,14 @@ class MarkovMachine {
 
   makeText(numWords = 100) {
     /** TODO
-      * get keys into an array
-      * grab a random key
-      * loop through numWords as long as numWords is greater than output and "key" aren't null
-      *    push a key into output array
-      *    get a random key's value from this.chains
+     * get keys into an array
+     * grab a random key
+     * loop through numWords as long as numWords is greater than output and "key" aren't null
+     *    push a key into output array
+     *    get a random key's value from this.chains
          return output array - join it
-    **/
+     **/
+
     const keys = Object.keys(this.chains)
     let randomKey = MarkovMachine.randomItem(keys)
     let output = []
@@ -58,6 +56,8 @@ class MarkovMachine {
       randomKey = MarkovMachine.randomItem(this.chains[randomKey]);
     }
 
-    return output
+    return output.join(' ')
   }
 }
+
+module.exports = { MarkovMachine }
