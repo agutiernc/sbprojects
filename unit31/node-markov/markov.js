@@ -31,13 +31,33 @@ class MarkovMachine {
       map.has(words[i]) ? map.get(words[i]).push(nextWord) : map.set(words[i], [nextWord]) 
     }
 
-    return Object.fromEntries(map)
+    this.chains = Object.fromEntries(map)
   }
 
+  // get random key from array
+  static randomItem = (arr) => arr[Math.floor(Math.random() * arr.length)]
 
   /** return random text from chains */
 
   makeText(numWords = 100) {
-    // TODO
+    /** TODO
+      * get keys into an array
+      * grab a random key
+      * loop through numWords as long as numWords is greater than output and "key" aren't null
+      *    push a key into output array
+      *    get a random key's value from this.chains
+         return output array - join it
+    **/
+    const keys = Object.keys(this.chains)
+    let randomKey = MarkovMachine.randomItem(keys)
+    let output = []
+
+    while (output.length < numWords && randomKey !== null) {
+      output.push(randomKey);
+      
+      randomKey = MarkovMachine.randomItem(this.chains[randomKey]);
+    }
+
+    return output
   }
 }
