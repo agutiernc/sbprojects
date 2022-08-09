@@ -42,7 +42,7 @@ app.get('/mode', (req, res, next) => {
   if (!req.query.nums) {
     throw new ExpressError(`Use a comma-separated list of numbers with query key - nums`, 400)
   }
-  
+
   const numsArr = req.query.nums.split(',')
   let nums = validateArray(numsArr)
   

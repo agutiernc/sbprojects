@@ -4,7 +4,7 @@
   "description": "express routing exercise",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --verbose",
     "dev": "nodemon app.js"
   },
   "author": "Alfonso Gutierrez",
@@ -13,6 +13,7 @@
     "express": "^4.18.1"
   },
   "devDependencies": {
+    "jest": "^28.1.3",
     "nodemon": "^2.0.19"
   }
 }

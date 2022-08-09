@@ -39,7 +39,7 @@ const findMode = (arr) => {
 
   let mode = Object.keys(obj).sort((a, b) => obj[b] - obj[a])[0]
 
-  return mode
+  return +mode
 }
 
 module.exports = { validateArray, findMode, findMedian, findMean }
