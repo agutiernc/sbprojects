@@ -21,14 +21,50 @@ router.post('/', (req, res, next) => {
   }
 })
 
-router.get('/:name', (req, res) => {
-  const findItem = items.find(i => i.name === req.params.name)
-  console.log('ITEM ====> ', findItem)
-  if (findItem === undefined) {
-    throw new ExpressError('Item not found', 404)
-  }
+router.get('/:name', (req, res, next) => {
+  try {
+    const findItem = items.find(i => i.name === req.params.name)
 
-  res.json({ item: findItem })
+    if (findItem === undefined) {
+      throw new ExpressError('Item not found', 404)
+    }
+  
+    res.json({ item: findItem })
+  } catch (err) {
+    return next(err)
+  }
+})
+
+router.patch('/:name', (req, res, next) => {
+  try {
+    const findItem = items.find(i => i.name === req.params.name)
+
+    if (findItem === undefined) {
+      throw new ExpressError('Item not found', 404)
+    }
+
+    findItem.name = req.body.name
+    findItem.price = req.body.price
+
+    res.json({ item: findItem })
+  } catch (err) {
+    return next(err)
+  }
+})
+
+
+router.delete('/:name', (req, res, next) => {
+  try {
+    const findItem = items.findIndex(i => i.name === req.params.name)
+
+    if (findItem === -1) throw new ExpressError('Item not found', 404)
+
+    items.splice(findItem, 1)
+
+    res.json({ message: 'Item deleted' })
+  } catch (err) {
+    return next(err)
+  }
 })
 
 module.exports = router
