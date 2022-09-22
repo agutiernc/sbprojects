@@ -1,0 +1,23 @@
+{
+  "name": "express-biztime",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "NODE_ENV=test jest --verbose --runInBand",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "author": "Alfonso Gutierrez",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.1",
+    "pg": "^8.8.0",
+    "slugify": "^1.6.5"
+  },
+  "devDependencies": {
+    "jest": "^29.0.3",
+    "nodemon": "^2.0.20",
+    "supertest": "^6.2.4"
+  }
+}
