@@ -24,7 +24,7 @@ beforeEach(async () => {
 
 
 afterEach(async () => {
-  // empties out invoices table each time a test finishes
+  // deletes invoices and companies table each time a test finishes
   await db.query('DELETE FROM invoices')
   await db.query('DELETE FROM companies')
 })
@@ -84,7 +84,6 @@ describe('GET /invoices/:id', () => {
   })
 })
 
-// DO PUT tests
 
 describe('DELETE /invoices/:id', () => {
   test('Deletes a single invoice', async () => {
@@ -92,5 +91,26 @@ describe('DELETE /invoices/:id', () => {
 
     expect(res.statusCode).toBe(200)
     expect(res.body).toEqual({ msg: 'DELETED!'})
+  })
+})
+
+
+describe('PUT /invoices/:id', () => {
+  test('Update a single invoice', async () => {
+    const res = await request(app)
+                        .put(`/invoices/${testInvoice.id}`)
+                        .send({ amt: 250 })
+
+    expect(res.statusCode).toBe(200)
+    expect(res.body).toEqual({
+      invoice: {
+        id: testInvoice.id,
+        comp_code: testInvoice.comp_code,
+        amt: testInvoice.amt,
+        paid: true,
+        add_date: testInvoice.add_date.toJSON(),
+        paid_date: testInvoice.add_date.toJSON()
+      }
+    })
   })
 })
