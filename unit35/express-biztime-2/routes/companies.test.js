@@ -32,7 +32,7 @@ describe('GET /companies', () => {
     const res = await request(app).get('/companies')
 
     expect(res.statusCode).toBe(200)
-    expect(res.body).toEqual({ companies: [testCompany]})
+    expect(res.body).toEqual({ companies: [testCompany] })
   })
 })
 
@@ -52,6 +52,27 @@ describe('GET /companies/:code', () => {
     const res = await request(app).get('/companies/xyz')
 
     expect(res.statusCode).toBe(404)
+  })
+})
+
+
+describe('POST /companies', () => {
+  test('Create a new company', async () => {
+    const res = await request(app)
+                        .post('/companies')
+                        .send({
+                          name: 'Dell',
+                          description: 'Maker of personal computers'
+                        })
+    
+    expect(res.statusCode).toBe(201)
+    expect(res.body).toEqual({
+      company: {
+        code: 'dell',
+        name: 'Dell',
+        description: 'Maker of personal computers'
+      }
+    })
   })
 })
 
