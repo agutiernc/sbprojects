@@ -10,7 +10,8 @@ class Message {
   /** register new message -- returns
    *    {id, from_username, to_username, body, sent_at}
    */
-  static async create({from_username, to_username, body}) {
+  static async create({ from_username, to_username, body }) {
+    console.log('from username', from_username)
     const result = await db.query(
         `INSERT INTO messages (
               from_username,
