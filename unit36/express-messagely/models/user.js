@@ -34,8 +34,11 @@ class User {
   static async authenticate(username, password) {
     const result = await db.query('SELECT password FROM users WHERE username = $1', [username])
 
-    const user = result.rows[0]
+    if (!result.rows[0]) {
+      throw new ExpressError(`Invalid user/password: ${username}`, 400)
+    }
 
+    const user = result.rows[0]
     const verifyPswd = await bcrypt.compare(password, user.password)
 
     return user && verifyPswd
