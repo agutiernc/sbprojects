@@ -3,6 +3,7 @@ const router = new express.Router();
 
 const jsonschema = require('jsonschema')
 const bookSchema = require('../schemas/bookSchema.json')
+const bookSchemaUpdate = require('../schemas/bookSchemaUpdate.json')
 
 const Book = require("../models/book");
 const ExpressError = require("../expressError");
@@ -56,7 +57,9 @@ router.post("/", async function (req, res, next) {
 /** PUT /[isbn]   bookData => {book: updatedBook}  */
 router.put("/:isbn", async function (req, res, next) {
   try {
-    const validBook = jsonschema.validate(req.body, bookSchema)
+    if ('isbn' in req.body) return next({ status: 400, message: 'Not allowed' })
+
+    const validBook = jsonschema.validate(req.body, bookSchemaUpdate)
 
     if (!validBook.valid) {
       const listOfErrors = validBook.errors.map(e => e.stack)
