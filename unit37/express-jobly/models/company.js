@@ -1,7 +1,7 @@
 "use strict";
 
 const db = require("../db");
-const { BadRequestError, NotFoundError } = require("../expressError");
+const { BadRequestError, NotFoundError, ExpressError } = require("../expressError");
 const { sqlForPartialUpdate } = require("../helpers/sql");
 
 
@@ -50,19 +50,58 @@ class Company {
 
   /** Find all companies.
    *
+   * searchFilters included if needed:
+   *  - minEmployees: int
+   *  - maxEmployees: int
+   *  - name: string and case insensitive (can do partial searches)
+   *
    * Returns [{ handle, name, description, numEmployees, logoUrl }, ...]
    * */
 
-  static async findAll() {
-    const companiesRes = await db.query(
-          `SELECT handle,
-                  name,
-                  description,
-                  num_employees AS "numEmployees",
-                  logo_url AS "logoUrl"
-           FROM companies
-           ORDER BY name`);
+  static async findAll(searchFilters = {}) {
+    let query = `SELECT handle, name, description,
+                    num_employees AS "numEmployees",
+                    logo_url AS "logoUrl"
+                 FROM companies `
     
+    const variablesSQL = []
+    const queries = [] // container for filtered queries
+
+    const { name, minEmployees, maxEmployees } = searchFilters
+
+    if (minEmployees > maxEmployees) {
+      throw new BadRequestError('minEmployees must be less than maxEmployees')
+    }
+
+    // filter for minEmployees query
+    if (minEmployees !== undefined) {
+      variablesSQL.push(minEmployees)
+
+      queries.push(`num_employees >= $${variablesSQL.length}`)
+    }
+
+    // filter for maxEmployees query
+    if (maxEmployees !== undefined) {
+      variablesSQL.push(maxEmployees)
+
+      queries.push(`num_employees <= $${variablesSQL.length}`)
+    }
+
+    // filter name queries
+    if (name) {
+      variablesSQL.push(`%${name}%`)
+
+      queries.push(`name ILIKE $${variablesSQL.length}`)
+    }
+
+    if (queries.length > 0) {
+      query += ' WHERE ' + queries.join(' AND ')
+    }
+    
+    query += 'ORDER BY name'
+
+    const companiesRes = await db.query(query, variablesSQL)
+
     return companiesRes.rows;
   }
 

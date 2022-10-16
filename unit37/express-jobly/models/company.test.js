@@ -94,6 +94,89 @@ describe("findAll", function () {
       },
     ]);
   });
+
+
+  test('Filter by minEmployees', async function () {
+    const companies = await Company.findAll({ minEmployees: 2})
+
+    expect(companies).toEqual([
+      {
+        handle: "c2",
+        name: "C2",
+        description: "Desc2",
+        numEmployees: 2,
+        logoUrl: "http://c2.img",
+      },
+      {
+        handle: "c3",
+        name: "C3",
+        description: "Desc3",
+        numEmployees: 3,
+        logoUrl: "http://c3.img",
+      },
+    ])
+  })
+
+  
+  test('Filter by maxEmployees', async function() {
+    const companies = await Company.findAll({ maxEmployees: 2 })
+
+    expect(companies).toEqual([
+      {
+        handle: "c1",
+        name: "C1",
+        description: "Desc1",
+        numEmployees: 1,
+        logoUrl: "http://c1.img",
+      },
+      {
+        handle: "c2",
+        name: "C2",
+        description: "Desc2",
+        numEmployees: 2,
+        logoUrl: "http://c2.img",
+      },
+    ])
+  })
+
+
+  test('Filter by name', async function () {
+    const companies = await Company.findAll({ name: '2'})
+
+    expect(companies).toEqual([
+      {
+        handle: "c2",
+        name: "C2",
+        description: "Desc2",
+        numEmployees: 2,
+        logoUrl: "http://c2.img",
+      },
+    ])
+  })
+
+
+  test('Combine filters', async function () {
+    const companies = await Company.findAll({ name: '3', minEmployees: 3 })
+
+    expect(companies).toEqual([
+      {
+        handle: "c3",
+        name: "C3",
+        description: "Desc3",
+        numEmployees: 3,
+        logoUrl: "http://c3.img",
+      },
+    ])
+  })
+
+
+  test('Error if minEmployees > maxEmployees', async function () {
+   try {
+    await Company.findAll({ minEmployees: 3, maxEmployees: 1 })
+   } catch (e) {
+    expect(e.message).toBe('minEmployees must be less than maxEmployees')
+   }
+  })
 });
 
 

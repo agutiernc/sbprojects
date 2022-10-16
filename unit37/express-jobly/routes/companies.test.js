@@ -110,6 +110,44 @@ describe("GET /companies", function () {
     
     expect(resp.statusCode).toEqual(500);
   });
+
+
+  test('Filter for minEmployees', async function () {
+    const res = await request(app)
+      .get('/companies')
+      .query({ minEmployees: 3 })
+
+    expect(res.body).toEqual({
+      companies: [
+        {
+          handle: "c3",
+          name: "C3",
+          description: "Desc3",
+          numEmployees: 3,
+          logoUrl: "http://c3.img",
+        },
+      ]
+    })
+  })
+
+
+  test('Combined filters work', async function () {
+    const res = await request(app)
+      .get('/companies')
+      .query({ maxEmployees: 3, minEmployees: 2, name: '3' })
+
+    expect(res.body).toEqual({
+      companies: [
+        {
+          handle: "c3",
+          name: "C3",
+          description: "Desc3",
+          numEmployees: 3,
+          logoUrl: "http://c3.img",
+        },
+      ]
+    })
+  })
 });
 
 
