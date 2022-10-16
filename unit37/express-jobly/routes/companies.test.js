@@ -11,6 +11,7 @@ const {
   commonAfterEach,
   commonAfterAll,
   u1Token,
+  adminToken
 } = require("./_testCommon");
 
 beforeAll(commonBeforeAll);
@@ -31,22 +32,33 @@ describe("POST /companies", function () {
     numEmployees: 10,
   };
 
-  test("ok for users", async function () {
+  test("Unauthorized users can't post", async function () {
     const resp = await request(app)
         .post("/companies")
         .send(newCompany)
         .set("authorization", `Bearer ${u1Token}`);
     
+    expect(resp.statusCode).toEqual(401);
+    expect(resp.body.error).toEqual({ message: 'Unauthorized', status: 401 });
+  });
+
+
+  test("only admin can post", async function () {
+    const resp = await request(app)
+        .post("/companies")
+        .send(newCompany)
+        .set("authorization", `Bearer ${adminToken}`);
+   
     expect(resp.statusCode).toEqual(201);
     expect(resp.body).toEqual({ company: newCompany });
   });
 
-
+  
   test("bad request with missing data", async function () {
     const resp = await request(app)
         .post("/companies")
         .send({ handle: "new", numEmployees: 10 })
-        .set("authorization", `Bearer ${u1Token}`);
+        .set("authorization", `Bearer ${adminToken}`);
 
     expect(resp.statusCode).toEqual(400);
   });
@@ -56,7 +68,7 @@ describe("POST /companies", function () {
     const resp = await request(app)
         .post("/companies")
         .send({ ...newCompany, logoUrl: "not-a-url" })
-        .set("authorization", `Bearer ${u1Token}`);
+        .set("authorization", `Bearer ${adminToken}`);
 
     expect(resp.statusCode).toEqual(400);
   });

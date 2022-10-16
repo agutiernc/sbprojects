@@ -48,7 +48,26 @@ function ensureLoggedIn(req, res, next) {
 }
 
 
+/** Middleware for admin only actions
+ * 
+ * Admin can create, update, and delete
+ */
+
+function requireAdmin(req, res, next) {
+  try {
+    if (!res.locals.user || !res.locals.user.isAdmin) {
+      throw new UnauthorizedError()
+    }
+
+    return next()
+  } catch (err) {
+    return next(err)
+  }
+}
+
+
 module.exports = {
   authenticateJWT,
   ensureLoggedIn,
+  requireAdmin
 };
