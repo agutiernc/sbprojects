@@ -11,6 +11,7 @@ const { requireAdmin } = require("../middleware/auth");
 const Job = require('../models/job')
 const jobNewSchema = require('../schemas/jobNew.json')
 const jobSearchSchema = require('../schemas/jobSearch.json')
+const jobUpdateSchema = require ('../schemas/jobUpdate.json')
 
 const router = new express.Router()
 
@@ -89,5 +90,50 @@ router.get('/:id', async function (req, res, next) {
   }
 })
 
+
+/** PATCH /[id] { fld1, fld2, ... } => { job }
+ *
+ * Patches job data.
+ *
+ * data can be: { title, salary, equity }
+ *
+ * Returns { id, title, salary, equity, companyHandle }
+ *
+ * Authorization required: Admin only
+ */
+
+router.patch('/:id', requireAdmin, async function (req, res, next) {
+  try {
+    const jobValidator = jsonschema.validate(req.body, jobUpdateSchema)
+
+    if (!jobValidator.valid) {
+      const errs = jobValidator.errors.map(e => e.stack);
+
+      throw new BadRequestError(errs);
+    }
+
+    const job = await Job.update(req.params.id, req.body)
+
+    return res.json({ job })
+  } catch (err) {
+    return next(err)
+  }
+})
+
+
+/** DELETE /[id]  =>  { deleted: id }
+ *
+ * Authorization: Adin only
+ */
+
+router.delete('/:id', requireAdmin, async function (req, res, next) {
+  try {
+    await Job.remove(req.params.id)
+
+    return res.json({ deleted: req.params.id })
+  } catch (err) {
+    return next(err)
+  }
+})
 
 module.exports = router;
