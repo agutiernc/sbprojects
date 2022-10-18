@@ -165,3 +165,69 @@ describe('get', function () {
     }
   })
 })
+
+
+/************************************** update */
+
+describe('Update job', function () {
+  const updateData = {
+    title: 'New Job',
+    salary: 1000,
+    equity: '0.5'
+  }
+
+  test('Admin can update', async function () {
+    const job = await Job.update(testJobIds[0], updateData)
+    
+    expect(job).toEqual({
+      id: testJobIds[0],
+      companyHandle: 'c1',
+      ...updateData
+    })
+  })
+
+  test('Error if no job id found', async function () {
+    try {
+      await Job.update(0, updateData);
+
+      fail();
+    } catch (err) {
+      expect(err instanceof NotFoundError).toBeTruthy();
+    }
+  })
+
+  test('Error if no data passed', async function () {
+    try {
+      await Job.update(testJobIds[0], {});
+
+      fail();
+    } catch (err) {
+      expect(err instanceof BadRequestError).toBeTruthy();
+    }
+  })
+})
+
+
+/************************************** remove */
+
+describe('remove job', function () {
+  test('Deletes a job', async function () {
+    await Job.remove(testJobIds[1])
+
+    const res = await db.query(`
+      SELECT id FROM jobs WHERE id = $1
+    `, [testJobIds[1]])
+
+    expect(res.rows.length).toEqual(0)
+  })
+
+  test('No job found', async function () {
+    try {
+      await Job.remove(0)
+
+      fail()
+    } catch (err) {
+      expect(err instanceof NotFoundError).toBeTruthy();
+    }
+  })
+})

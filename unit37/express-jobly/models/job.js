@@ -135,11 +135,11 @@ class Job {
                       WHERE id = ${idVaridx}
                       RETURNING
                         id, title, salary, equity,
-                        company_handle AS companyHandle`;
+                        company_handle AS "companyHandle"`;
     
     const result = await db.query(querySql, [...values, id])
     const job = result.rows[0]
-
+    
     if (!job) throw new NotFoundError(`No job of id (${id}) found`);
 
     return job
