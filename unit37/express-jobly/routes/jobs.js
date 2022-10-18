@@ -53,6 +53,12 @@ router.post('/', requireAdmin, async function (req, res, next) {
 
 router.get('/', async function (req, res, next) {
   const query = req.query
+  query.hasEquity = query.hasEquity === 'true'
+
+  // convert minSalary to Number
+  if (query.minSalary !== undefined) {
+    query.minSalary = +query.minSalary
+  }
 
   try {
     const validQueries = jsonschema.validate(req.query, jobSearchSchema)

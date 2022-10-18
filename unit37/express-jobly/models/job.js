@@ -33,7 +33,7 @@ class Job {
    * Returns [{ id, title, salary, equity, companyHandle }, ...]
    */
 
-  static async findAll() {
+  static async findAll(searchFilters = {}) {
     let query = `SELECT j.id, j.title, j.salary, j.equity,
                   j.company_handle AS "companyHandle",
                   c.name AS "companyName"
@@ -44,9 +44,34 @@ class Job {
     const variablesSQL = []
     const queries = [] // container for filtered queries
 
+    const { title, minSalary, hasEquity } = searchFilters
+
+    // filter for hasEquity
+    if (hasEquity) {
+      queries.push(` equity > 0`)
+    }
+
+    // filter for minSalary
+    if (minSalary !== undefined) {
+      variablesSQL.push(minSalary)
+
+      queries.push(` salary >= $${variablesSQL.length}`)
+    }
+
+    // filter for title
+    if (title) {
+      variablesSQL.push(`%${title}%`)
+
+      queries.push(` title ILIKE $${variablesSQL.length}`)
+    }
+
+    if (queries.length > 0) {
+      query += ' WHERE ' + queries.join(' AND ')
+    }
+
     query += ' ORDER BY title'
 
-    const jobsRes = await db.query(query)
+    const jobsRes = await db.query(query, variablesSQL)
 
     return jobsRes.rows
   }

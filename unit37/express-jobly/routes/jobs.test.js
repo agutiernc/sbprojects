@@ -93,6 +93,45 @@ describe('GET /jobs', function () {
 
     expect(res.statusCode).toEqual(200)
   })
+
+  test('Filter for title', async function () {
+    const res = await request(app).get('/jobs').query({ title: 'J1' })
+    
+    expect(res.statusCode).toEqual(200)
+    expect(res.body).toEqual({
+      jobs: [
+        {
+          id: testJobIds[0],
+          title: 'J1',
+          salary: 1,
+          equity: '0.1',
+          companyHandle: 'c1',
+          companyName: 'C1'
+        }
+      ]
+    })
+  })
+
+  test('Using multiple filters', async function () {
+    const res = await request(app)
+          .get('/jobs')
+          .query({ title: 'J1', hasEquity: true })
+    
+    
+    expect(res.statusCode).toEqual(200)
+    expect(res.body).toEqual({
+      jobs: [
+        {
+          id: testJobIds[0],
+          title: 'J1',
+          salary: 1,
+          equity: '0.1',
+          companyHandle: 'c1',
+          companyName: 'C1'
+        }
+      ]
+    })
+  })
 }) // end
 
 
