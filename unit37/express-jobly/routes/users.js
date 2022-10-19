@@ -53,6 +53,30 @@ router.post("/", ensureLoggedIn, requireAdmin, async function (req, res, next) {
 });
 
 
+/** POST /[username]/jobs/[id]
+ * 
+ * Returns => { 'applied': jobId }
+ * 
+ * Authorization required: Admin or user with username
+ */
+
+router.post('/:username/jobs/:id',
+  ensureAdminOrCorrectUser,
+  async function (req, res, next) {
+
+  try {
+    const jobId = +req.params.id
+
+    await User.applyToJob(req.params.username, jobId)
+
+    return res.json({ applied: jobId })
+  } catch (err) {
+    return next(err)
+  }
+  
+})
+
+
 /** GET / => { users: [ {username, firstName, lastName, email }, ... ] }
  *
  * Returns list of all users.

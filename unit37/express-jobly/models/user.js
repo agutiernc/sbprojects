@@ -144,6 +144,16 @@ class User {
 
     if (!user) throw new NotFoundError(`No user: ${username}`);
 
+    // get job applications if user has any
+    const userApplicationsRes = await db.query(`
+      SELECT a.job_id
+      FROM applications AS a
+      WHERE a.username = $1
+    `, [username])
+
+    // Add applications data to user
+    user.applications = userApplicationsRes.rows.map(a => a.job_id)
+
     return user;
   }
 
@@ -213,6 +223,43 @@ class User {
     const user = result.rows[0];
 
     if (!user) throw new NotFoundError(`No user: ${username}`);
+  }
+
+
+  /** User can apply for a job
+   * 
+   * Applications data contains username and jobId
+   */
+
+  static async applyToJob(username, jobId) {
+    const verifyJob = await db.query(`
+        SELECT id
+        FROM jobs
+        WHERE id = $1
+      `,[jobId])
+
+    const job = verifyJob.rows[0]
+
+    if (!job) {
+      throw new NotFoundError(`Invalid job id: ${jobId}`)
+    }
+
+    const verifyUsername = await db.query(`
+        SELECT username
+        FROM users
+        WHERE username = $1
+      `, [username])
+    
+    const user = verifyUsername.rows[0]
+
+    if (!user) {
+      throw new NotFoundError(`Invalid username: ${username}`)
+    }
+
+    await db.query(`
+      INSERT INTO applications (job_id, username)
+        VALUES ($1, $2)
+    `, [jobId, username])
   }
 }
 

@@ -12,7 +12,8 @@ const {
   commonAfterAll,
   u1Token,
   u2Token,
-  adminToken
+  adminToken,
+  testJobIds
 } = require("./_testCommon");
 
 beforeAll(commonBeforeAll);
@@ -197,7 +198,7 @@ describe("GET /users/:username", function () {
     const resp = await request(app)
         .get(`/users/u1`)
         .set("authorization", `Bearer ${adminToken}`);
-
+    
     expect(resp.body).toEqual({
       user: {
         username: "u1",
@@ -205,6 +206,7 @@ describe("GET /users/:username", function () {
         lastName: "U1L",
         email: "user1@user.com",
         isAdmin: false,
+        applications: []
       },
     });
   });
@@ -382,3 +384,42 @@ describe("DELETE /users/:username", function () {
     expect(resp.statusCode).toEqual(404);
   });
 });
+
+
+/************************************** POST /users/:username/jobs/:id */
+
+describe('POST /users/:username/jobs/:id', function () {
+  test('Admin can post', async function () {
+    const res = await request(app)
+        .post(`/users/u1/jobs/${testJobIds[1]}`)
+        .set("authorization", `Bearer ${adminToken}`);
+    
+    expect(res.statusCode).toEqual(200)
+    expect(res.body).toEqual({ applied: testJobIds[1] })
+  })
+
+  test('User with same username can apply', async function () {
+    const res = await request(app)
+        .post(`/users/u1/jobs/${testJobIds[1]}`)
+        .set("authorization", `Bearer ${u1Token}`);
+    
+    expect(res.statusCode).toEqual(200)
+    expect(res.body).toEqual({ applied: testJobIds[1] })
+  })
+
+  test('Unauthorized user unable to apply', async function () {
+    const res = await request(app)
+        .post(`/users/u1/jobs/${testJobIds[1]}`)
+        .set("authorization", `Bearer ${u2Token}`);
+    
+    expect(res.statusCode).toEqual(401)
+  })
+
+  test('Invalid job id', async function () {
+    const res = await request(app)
+        .post(`/users/u1/jobs/0`)
+        .set("authorization", `Bearer ${adminToken}`);
+    
+    expect(res.statusCode).toEqual(404)
+  })
+})
