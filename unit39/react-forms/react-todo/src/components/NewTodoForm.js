@@ -26,16 +26,16 @@ const NewTodoForm = ({ newTodo }) => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
+        <label htmlFor="todo">Add todo:</label>
         <input
           id="todo"
           type="text"
-          placeholder='Enter todo...'
           name="todo"
           value={formData.todo}
           onChange={handleChange}
         />
 
-        <button>Add todo</button>
+        <button>Submit</button>
       </form>
     </div>
   )
