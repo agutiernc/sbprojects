@@ -1,0 +1,29 @@
+.Liquorice {
+  margin: auto;
+  width: 800px;
+}
+
+.Liquorice h1 {
+  text-align: center;
+}
+.Liquorice img {
+  width: 350px;
+  height: 300px;
+}
+
+.Liquorice .container {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(2, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  align-items: center;
+}
+
+.Liquorice .img-container {
+  grid-area: 1 / 1 / 2 / 2;
+}
+
+.Liquorice .btn-container {
+  grid-area: 2 / 1 / 3 / 2;
+}

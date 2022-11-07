@@ -1,0 +1,29 @@
+.Chips {
+  margin: auto;
+  width: 800px;
+}
+
+.Chips h1 {
+  text-align: center;
+}
+.Chips img {
+  width: 350px;
+  height: 300px;
+}
+
+.Chips .container {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(2, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  align-items: center;
+}
+
+.Chips .img-container {
+  grid-area: 1 / 1 / 2 / 2;
+}
+
+.Chips .btn-container {
+  grid-area: 2 / 1 / 3 / 2;
+}
