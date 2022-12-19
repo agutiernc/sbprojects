@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Form, InputGroup, Button} from 'react-bootstrap';
 
-const SearchForm = ({ search }) => {
+const SearchForm = ({ search, type }) => {
   const [filter, setFilter] = useState('')
 
   const handleSubmit = (e) => {
@@ -14,13 +14,13 @@ const SearchForm = ({ search }) => {
   const handleChange = (e) => {
     setFilter(e.target.value)
   }
-
+  
   return (
     <div className='mt-5 col-md-5 mx-auto'>
       <Form onSubmit={handleSubmit}>
         <InputGroup className="mb-3">
           <Form.Control
-            placeholder="Search for company"
+            placeholder={type === 'job' ? 'Search for job' : 'Search for company'}
             type="text"
             name="filter"
             value={filter}
