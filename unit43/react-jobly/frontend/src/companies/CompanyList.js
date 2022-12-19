@@ -3,11 +3,12 @@ import { Row } from 'react-bootstrap'
 import JoblyApi from '../api/api'
 
 import CompanyCard from '../companies/CompanyCard'
+import SearchForm from '../common/SearchForm'
 
 const CompanyList = () => {
   const [companies, setCompanies] = useState([])
 
-  // grabs all companies from API - filters by name if included by search
+  // grabs all companies from API - filters by name if searched
   const companiesList = async (name) => {
     let companies = await JoblyApi.getCompanies(name)
 
@@ -35,6 +36,8 @@ const CompanyList = () => {
   return (
     <div>
       <h1 className='text-center mt-5'>Companies</h1>
+
+      <SearchForm search={companiesList} />
 
       <div className='mt-5'>
         <Row xs={1} md={2} className="g-4 my-3">
