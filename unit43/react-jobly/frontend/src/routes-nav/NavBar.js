@@ -9,7 +9,7 @@ const NavBar = () => {
         <Nav className="justify-content-end">
           <Nav.Link href="/companies">Companies</Nav.Link>
           <Nav.Link href="/jobs">Jobs</Nav.Link>
-          <Nav.Link href="/singup">Signup</Nav.Link>
+          <Nav.Link href="/signup">Signup</Nav.Link>
           <Nav.Link href="/login">Login</Nav.Link>
         </Nav>
       </Container>
