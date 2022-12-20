@@ -1,22 +1,64 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom'
+import React, { useState, useContext } from 'react'
+import { NavLink, useNavigate, Navigate } from 'react-router-dom'
+import UserContext from './UserContext'
 import { Form, Button } from 'react-bootstrap'
 
-const LoginForm = () => {
+const LoginForm = ({ login }) => {
+  const navigate = useNavigate()
+  const { currentUser } = useContext(UserContext)
+  const initialValue = {
+    username: '',
+    password: ''
+  }
+
+  const [formData, setFormData] = useState(initialValue)
+
+  if (currentUser) {
+    return <Navigate to='/' />
+  }
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+
+    setFormData(data => ({
+      ...data,
+      [name]: value
+    }))
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    const res = await login(formData)
+    
+    res.success ? navigate('/') : alert('Error: Please try again!')
+  }
 
   return (
-    <div className='d-flex mt-5 flex-column align-items-center col-3 mx-auto justify-content-center w-25'>
-      <div className='my-5'>
+    <div className="d-flex mt-5 flex-column align-items-center col-3 mx-auto justify-content-center w-50">
+      <div className="my-5">
         <h1>Login</h1>
       </div>
 
-      <Form className='border border-3 p-4 rounded-2'>
+      <Form onSubmit={handleSubmit} className="border border-3 p-4 rounded-2">
         <Form.Group className="mb-3" controlId="formBasicUsername">
-          <Form.Control type="text" placeholder="Enter Username" />
+          <Form.Control
+            type="text"
+            placeholder="Enter Username"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+          />
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Control type="password" placeholder="Enter Password" />
+          <Form.Control
+            type="password"
+            placeholder="Enter Password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+          />
         </Form.Group>
 
         <Button variant="outline-secondary" type="submit" size="lg">
