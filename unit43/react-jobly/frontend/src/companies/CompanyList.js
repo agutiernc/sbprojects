@@ -8,19 +8,16 @@ import SearchForm from '../common/SearchForm'
 const CompanyList = () => {
   const [companies, setCompanies] = useState([])
 
+  useEffect(() => {
+    companiesList()
+  }, [])
+
   // grabs all companies from API - filters by name if searched
   const companiesList = async (name) => {
     let companies = await JoblyApi.getCompanies(name)
 
     setCompanies(companies)
   }
-
-  useEffect(() => {
-    companiesList()
-  }, [])
-
-
-  // console.log(companies)
 
   // replace with loading spinner
   if (!companies) return null
@@ -29,9 +26,6 @@ const CompanyList = () => {
   const halfArr = Math.floor(companies.length / 2)
   const firstHalfArr = companies.slice(0, halfArr)
   const secondHalfArr = companies.slice(halfArr, companies.length)
-
-  // console.log('1st: ', firstHalfArr)
-  // console.log('2nd: ', secondHalfArr)
 
   return (
     <div>
@@ -53,17 +47,7 @@ const CompanyList = () => {
             ))
           }
         </Row>
-
-
-        {/* {
-         companies.map((c, idx) => (
-            <Row key={idx} xs={1} md={2} className="g-4 my-3">
-                  <CompanyCard key={c.handle} company={c} />
-                  <CompanyCard key={c.handle} company={c} />
-            </Row>
-          ))
-        } */}
-        </div>
+      </div>
     </div>
   )
 }

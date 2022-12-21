@@ -14,29 +14,34 @@ export const TOKEN_STORAGE_ID = "jobly-token";
 const App = () => {
   const [currentUser, setCurrentUser] = useState(null)
   const [token, setToken] = useLocalStorage(TOKEN_STORAGE_ID)
-  
-  // console.log('currUser: ', currentUser)
-  // console.log('token: ', token)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    const getCurrentUser = async () => {
-      if (token) {
-        try {
-          let { username } = decodeToken(token)
-  
-          JoblyApi.token = token
-  
-          let currentUser = await JoblyApi.getCurrentUser(username)
-  
-          setCurrentUser(currentUser)
-        } catch (err) {
-          setCurrentUser(null)
-        }
-      }
-    }
+      const getCurrentUser = async () => {
+        if (token) {
+          try {
+            let { username } = decodeToken(token);
 
-    getCurrentUser()
-  }, [token])
+            JoblyApi.token = token;
+
+            let currentUser = await JoblyApi.getCurrentUser(username);
+
+            setCurrentUser(currentUser);
+           
+          } catch (err) {
+            console.error("App loadUserInfo: problem loading", err);
+
+            setCurrentUser(null);
+          }
+        }
+
+        setLoading(true);
+      }
+
+      setLoading(false);
+      getCurrentUser();
+    }, [token]);
+
 
   const signup = async (data) => {
     try {
@@ -50,26 +55,15 @@ const App = () => {
     }
   }
 
-  // const login = async (data) => {
-  //   try {
-  //     let token = await JoblyApi.login(data)
-
-  //     setToken(token)
-
-  //     return { success: true }
-  //   } catch (errors) {
-  //     return { success: false, errors}
-  //   }
-  // }
-
-  async function login(loginData) {
+  const login = async (data) => {
     try {
-      let token = await JoblyApi.login(loginData);
-      setToken(token);
-      return { success: true };
+      let token = await JoblyApi.login(data)
+
+      setToken(token)
+      
+      return { success: true }
     } catch (errors) {
-      console.error("login failed", errors);
-      return { success: false, errors };
+      return { success: false, errors}
     }
   }
 
@@ -78,16 +72,21 @@ const App = () => {
     setCurrentUser(null)
   }
 
-  return (
-    <Router>
-      <UserContext.Provider value={{ currentUser, setCurrentUser }}>
-        <NavBar logout={logout} />
-
-        <Container>
-          <ComponentRoutes signup={signup} login={login} />
-        </Container>
-      </UserContext.Provider>
-    </Router>
-  )
+  if (loading) {
+    return (
+      <Router>
+        <UserContext.Provider value={{ currentUser, setCurrentUser }}>
+          <NavBar logout={logout} />
+  
+          <Container>
+            <ComponentRoutes signup={signup} login={login} />
+          </Container>
+        </UserContext.Provider>
+      </Router>
+    )
+  } else {
+    return <h1>Loading...</h1>
+  } 
 }
+
 export default App;

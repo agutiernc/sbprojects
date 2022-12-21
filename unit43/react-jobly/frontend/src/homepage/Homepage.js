@@ -4,7 +4,7 @@ import './Homepage.css'
 
 const Homepage = () => {
   const { currentUser } = useContext(UserContext)
-  
+
   // shows message when user logs in
   const showMsg = () => (
     <div className='msg'>
