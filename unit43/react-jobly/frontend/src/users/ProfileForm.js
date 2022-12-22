@@ -4,8 +4,10 @@ import UserContext from '../users/UserContext'
 import JoblyApi from '../api/api'
 import { Form, Button } from 'react-bootstrap'
 
+import Notify from '../common/Notify'
+
 const ProfileForm = () => {
-  const { currentUser, setCurrentUser } = useContext(UserContext)
+  const { currentUser, setCurrentUser, message, setMessage } = useContext(UserContext)
   const initialValue = {
     password: '',
     email: currentUser.email,
@@ -42,7 +44,11 @@ const ProfileForm = () => {
 
     try {
       updatedUser = await JoblyApi.saveProfile(currentUser.username, profileData)
-    } catch (errors) {
+
+      setMessage({ msg: 'User profile updated!', type: 'success' })
+    } catch (error) {
+      setMessage({ msg: 'Unable to update profile!', type: 'error' })
+      
       return
     }
 
@@ -52,6 +58,8 @@ const ProfileForm = () => {
 
   return (
     <div className="d-flex mt-5 flex-column align-items-center col-3 mx-auto justify-content-center w-50">
+      <Notify message={message} />
+
       <div className="my-5">
         <h1>Profile Update</h1>
       </div>

@@ -1,12 +1,13 @@
 import React, { useState, useContext } from 'react'
 import { NavLink, useNavigate, Navigate } from 'react-router-dom'
 import { Form, Button } from 'react-bootstrap'
-
 import UserContext from './UserContext'
+
+import Notify from '../common/Notify'
 
 const SignupForm = ({ signup }) => {
   const navigate = useNavigate()
-  const { currentUser } = useContext(UserContext)
+  const { currentUser, message, setMessage } = useContext(UserContext)
   const initialState = {
     username: '',
     password: '',
@@ -33,13 +34,25 @@ const SignupForm = ({ signup }) => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    const res = await signup(formData)
+    try {
+      const res = await signup(formData)
 
-    res.success ? navigate('/') : alert('Error: Please try again!')
+      if (res.success) {
+        navigate('/')
+      } else {
+        setMessage({ msg: 'Unable to create account. Please, try again.', type: 'error' })
+        
+        return;
+      }
+    } catch (errors) {
+      console.log('error: ', errors)
+    }
   }
-
+  
   return (
     <div className='d-flex mt-5 flex-column align-items-center col-3 mx-auto justify-content-center w-50'>
+      <Notify message={message} />
+
       <div className='my-5'>
         <h1>Sign Up</h1>
       </div>

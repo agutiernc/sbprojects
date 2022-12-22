@@ -13,9 +13,12 @@ export const TOKEN_STORAGE_ID = "jobly-token";
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState(null)
+  const [appIds, setAppIds] = useState(new Set([]))
   const [token, setToken] = useLocalStorage(TOKEN_STORAGE_ID)
   const [loading, setLoading] = useState(false)
+  const [message, setMessage] = useState({ msg: '', type: ''})
 
+  // load user info
   useEffect(() => {
       const getCurrentUser = async () => {
         if (token) {
@@ -27,7 +30,7 @@ const App = () => {
             let currentUser = await JoblyApi.getCurrentUser(username);
 
             setCurrentUser(currentUser);
-           
+            setAppIds(new Set(currentUser.applications))
           } catch (err) {
             console.error("App loadUserInfo: problem loading", err);
 
@@ -42,7 +45,7 @@ const App = () => {
       getCurrentUser();
     }, [token]);
 
-
+  
   const signup = async (data) => {
     try {
       let token = await JoblyApi.signup(data)
@@ -72,10 +75,23 @@ const App = () => {
     setCurrentUser(null)
   }
 
+  const hasAppliedToJob = (id) => appIds.has(id)
+
+  const applyToJob = (id) => {
+    if (hasAppliedToJob(id)) return;
+
+    JoblyApi.applyToJob(currentUser.username, id)
+
+    setAppIds(new Set([...appIds, id]))
+  }
+
+  
   if (loading) {
     return (
       <Router>
-        <UserContext.Provider value={{ currentUser, setCurrentUser }}>
+        <UserContext.Provider
+          value={{ currentUser, setCurrentUser, hasAppliedToJob, applyToJob, message, setMessage }}
+        >
           <NavBar logout={logout} />
   
           <Container>

@@ -3,9 +3,11 @@ import { NavLink, useNavigate, Navigate } from 'react-router-dom'
 import UserContext from './UserContext'
 import { Form, Button } from 'react-bootstrap'
 
+import Notify from '../common/Notify'
+
 const LoginForm = ({ login }) => {
   const navigate = useNavigate()
-  const { currentUser } = useContext(UserContext)
+  const { currentUser, message, setMessage } = useContext(UserContext)
   const initialValue = {
     username: '',
     password: ''
@@ -31,11 +33,19 @@ const LoginForm = ({ login }) => {
 
     const res = await login(formData)
     
-    res.success ? navigate('/') : alert('Error: Please try again!')
+    if (res.success) {
+      navigate('/')
+    } else {
+      setMessage({ msg: 'Incorrect Username or Password', type: 'error' })
+        
+      return;
+    }
   }
 
   return (
     <div className="d-flex mt-5 flex-column align-items-center col-3 mx-auto justify-content-center w-50">
+      <Notify message={message} />
+
       <div className="my-5">
         <h1>Login</h1>
       </div>

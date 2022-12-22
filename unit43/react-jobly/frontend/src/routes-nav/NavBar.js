@@ -34,7 +34,7 @@ const NavBar = ({ logout }) => {
   return (
     <Navbar bg="dark" variant="dark">
       <Container>
-        <Navbar.Brand href="/">Jobly</Navbar.Brand>
+        <Navbar.Brand href="/" className="fw-bolder">Jobly</Navbar.Brand>
         <Nav className="justify-content-end">
           {currentUser ? loggedIn() : loggedOut()}
         </Nav>
