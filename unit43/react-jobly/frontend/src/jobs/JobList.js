@@ -19,9 +19,6 @@ const JobList = () => {
     allJobs()
   }, [])
 
-
-  // console.log('jobs: ', jobs)
-
   // replace with loading spinner
   if (!jobs) return null
 
@@ -29,9 +26,6 @@ const JobList = () => {
   const halfArr = Math.floor(jobs.length / 2)
   const firstHalfArr = jobs.slice(0, halfArr)
   const secondHalfArr = jobs.slice(halfArr, jobs.length)
-
-  // console.log('1st: ', firstHalfArr)
-  // console.log('2nd: ', secondHalfArr)
 
   return (
     <div>

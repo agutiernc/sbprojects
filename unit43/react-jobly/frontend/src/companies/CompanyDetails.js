@@ -9,8 +9,6 @@ const CompanyDetails = () => {
   const { handle } = useParams()
   const [company, setCompany] = useState(null)
 
-  // console.log('handle: ', handle)
-
   useEffect(() => {
     const companyInfo = async () => {
       let company = await JoblyApi.getCompany(handle)
@@ -24,8 +22,6 @@ const CompanyDetails = () => {
   // replace with loading spinner
   if (!company) return null
 
-  // const jobCards = company.jobs.map(j => <JobCard key={j.id} job={j} />)
-
   // split companies props in half for 2 columns in row
   const halfArr = Math.floor(company.jobs.length / 2)
   const firstHalfArr = company.jobs.slice(0, halfArr)
@@ -34,8 +30,6 @@ const CompanyDetails = () => {
   const jobCards1 = firstHalfArr.map(j => <JobCard key={j.id} job={j} />)
   const jobCards2 = secondHalfArr.map(j => <JobCard key={j.id} job={j} />)
 
-  // console.log('company: ', company)
-  // console.log(secondHalfArr)
   return (
     <div>
       <h1 className='text-center mt-5'>{company.name}</h1>
