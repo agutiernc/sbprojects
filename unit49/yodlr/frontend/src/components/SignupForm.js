@@ -8,7 +8,7 @@ import {
   FormControl,
   Input,
   Button
-} from '@chakra-ui/react'
+} from "@chakra-ui/react";
 
 const SignupForm = () => {
   const navigate = useNavigate();
