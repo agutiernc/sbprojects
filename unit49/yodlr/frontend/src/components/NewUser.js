@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import YoplyApi from "../api/api";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import {
@@ -15,22 +15,16 @@ import {
   Stack
 } from "@chakra-ui/react";
 
-const UserEdit = () => {
-  const { id } = useParams();
+const NewUser = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState()
+  const initialState = {
+    email: '',
+    firstName: '',
+    lastName: '',
+    state: ''
+  }
 
-  useEffect(() => {
-    const userInfo = async () => {
-      let user = await YoplyApi.getUser(id)
-  
-      setFormData(user)
-    }
-
-    userInfo()
-  }, [id])
-
-  if (!formData) return null
+  const [formData, setFormData] = useState(initialState)
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,7 +39,7 @@ const UserEdit = () => {
     e.preventDefault();
 
     try {
-      const res = await YoplyApi.updateUser(id, formData);
+      const res = await YoplyApi.signup(formData);
      
       if (res) {
         // if updated, redirect to admin page
@@ -58,23 +52,10 @@ const UserEdit = () => {
     }
   }
 
-  const handleDeleteUser = async (e) => {
-    e.preventDefault()
-
-    try {
-      await YoplyApi.deleteUser(id, formData)
-
-      // if deleted, redirect to admin page
-      navigate('/admin');
-    } catch (err) {
-      console.log('User does not exist')
-    }
-  }
-
   return (
     <div>
       <Heading as='h2' textAlign='center' my='10' color='#048FC7'>
-        Update User
+        Add New User
       </Heading>
 
       <Box maxWidth="100%" ml="60">
@@ -87,11 +68,10 @@ const UserEdit = () => {
         <Box p={8} maxWidth="80%" borderWidth={1} borderRadius={8} boxShadow="lg">
           <Box my={4}>
             <form onSubmit={handleSubmit} mx='auto'>
-              <FormControl>
+              <FormControl isRequired>
                 <FormLabel fontSize="sm">Email:</FormLabel>
                 <Input
                   type="email"
-                  placeholder="Email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
@@ -101,7 +81,6 @@ const UserEdit = () => {
                 <FormLabel fontSize="sm">First Name:</FormLabel>
                 <Input
                   type="text"
-                  placeholder="First Name"
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleChange}
@@ -111,7 +90,6 @@ const UserEdit = () => {
                 <FormLabel fontSize="sm">Last Name:</FormLabel>
                 <Input
                   type="text"
-                  placeholder="Last Name"
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleChange}
@@ -132,21 +110,10 @@ const UserEdit = () => {
                   width='full'
                   colorScheme='blue'
                 >
-                  Update
+                  Add User
                 </Button>
                 
               </FormControl>
-            </form>
-
-            <form onSubmit={handleDeleteUser}>
-              <Button
-                type="submit"
-                mt='4'
-                width='full'
-                colorScheme='red'
-              >
-                Delete user?
-              </Button>
             </form>
           </Box>
         </Box>
@@ -156,4 +123,4 @@ const UserEdit = () => {
   )
 }
 
-export default UserEdit;
+export default NewUser;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import YoplyApi from "../api/api";
-import { Heading, Box } from "@chakra-ui/react";
+import { Heading, Box, Button } from "@chakra-ui/react";
 import { createColumnHelper } from "@tanstack/react-table";
 import DataTable from "./DataTable";
 
@@ -58,6 +58,12 @@ const Admin = () => {
       <Heading as='h2' textAlign='center' my='10' color='#048FC7'>
         Admin Page
       </Heading>
+
+      <Box maxWidth="20%" mx="auto" my='10'>
+        <Link to="/admin/newuser">
+          <Button colorScheme='blue'>Add New User</Button>
+        </Link>
+      </Box>
 
       <DataTable columns={columns} data={users} />
     </Box>
