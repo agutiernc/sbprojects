@@ -35,9 +35,9 @@ const SignupForm = () => {
 
     try {
       const res = await YoplyApi.signup(formData);
-      console.log('res signup: ', res)
+     
       if (res) {
-        navigate('/');
+        navigate('/'); // redirect to main if success
       } else {
         return;
       }

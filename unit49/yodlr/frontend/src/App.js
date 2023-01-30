@@ -10,7 +10,7 @@ const App = () => {
   
   return (
     <Router>
-      <Container maxW='lg'>
+      <Container maxW='90%'>
         <ComponentRoutes />
       </Container>
     </Router>

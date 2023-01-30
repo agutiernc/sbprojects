@@ -8,10 +8,6 @@ class YoplyApi {
   static async request(endpoint, data = {}, method = "get") {
     console.debug("API Call:", endpoint, data, method);
 
-    // there are multiple ways to pass an authorization token, this is how you
-    //    pass it in the header.
-    // this has been provided to show you another way to pass the token. you are
-    //    only expected to read this code for this project.
     const url = `${BASE_URL}/${endpoint}`;
     const headers = { Authorization: `Bearer ${YoplyApi.token}` };
     const params = (method === "get") ? data : {};
@@ -39,7 +35,7 @@ class YoplyApi {
 
   static async getUser(id) {
     const res = await this.request(`users/${id}`);
-
+    
     return res;
   }
 
@@ -47,18 +43,28 @@ class YoplyApi {
 
   static async signup(data) {
     const res = await this.request('users', data, 'post');
-    console.log('res from api: ', res)
+    
     return res;
+  }
+
+  /** Update user details */
+
+  static async updateUser(id, data) {
+    const res = await this.request(`users/${id}`, data, 'put');
+    
+    return res;
+  }
+
+  /** Delete user */
+  
+  static async deleteUser(id, data) {
+    try {
+      await this.request(`users/${id}`, data, 'delete');
+    } catch (err) {
+      console.log(`User id (${id}) does not exist`);
+    }
   }
 }
 
 
 export default YoplyApi;
-
-
-
-// export const getUsers = async () => {
-//   const res = await axios.get(`${BASE_URL}/users`);
-
-//   return res.data
-// }

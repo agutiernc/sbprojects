@@ -4,6 +4,7 @@
     "2" : { "id": 2, "email": "jane@getyodlr.com", "firstName": "Jane", "lastName": "Stone", "state": "active"},
     "3" : { "id": 3, "email": "lilly@getyodlr.com", "firstName": "Lilly", "lastName": "Smith", "state": "pending"},
     "4" : { "id": 4, "email": "fred@getyodlr.com", "firstName": "Fred", "lastName": "Miles", "state": "pending"},
-    "5" : { "id": 5, "email": "alex@getyodlr.com", "firstName": "Alexandra", "lastName": "Betts", "state": "pending"}
+    "5" : { "id": 5, "email": "alex@getyodlr.com", "firstName": "Alexandra", "lastName": "Betts", "state": "pending"},
+    "6" : { "id": 6, "email": "tester@tests.com", "firstName": "Tester", "lastName": "One", "state": "pending"}
   }
 }

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import YoplyApi from "../api/api";
-import { Heading } from "@chakra-ui/react";
+import { Heading, Box } from "@chakra-ui/react";
 import { createColumnHelper } from "@tanstack/react-table";
 import DataTable from "./DataTable";
 
 const Admin = () => {
   const [users, setUsers] = useState([]);
 
+  // get all users data
   useEffect(() => {
     const usersList = async (name) => {
       let users = await YoplyApi.getUsers(name)
@@ -17,82 +19,49 @@ const Admin = () => {
     usersList()
   }, []);
 
-  // console.log('users: ', users)
-
   if (!users) return null;
 
-  const columnHelper = createColumnHelper()
+  let count; // get IDs for URL
+
+  // Gets info for Table Columns
+  const columnHelper = createColumnHelper();
 
   const columns = [
     columnHelper.accessor("id", {
-      cell: (info) => info.getValue(),
+      cell: (info) => {
+        count = info.getValue();
+        
+        return <Link to={`/admin/users/${count}`}>{info.getValue()}</Link>
+      },
       header: "ID"
     }),
     columnHelper.accessor("email", {
-      cell: (info) => info.getValue(),
+      cell: (info) => <Link to={`/admin/users/${count}`}>{info.getValue()}</Link>,
       header: "Email"
     }),
     columnHelper.accessor("firstName", {
-      cell: (info) => info.getValue(),
+      cell: (info) => <Link to={`/admin/users/${count}`}>{info.getValue()}</Link>,
       header: "First Name"
     }),
     columnHelper.accessor("lastName", {
-      cell: (info) => info.getValue(),
+      cell: (info) => <Link to={`/admin/users/${count}`}>{info.getValue()}</Link>,
       header: "Last Name"
     }),
     columnHelper.accessor("state", {
-      cell: (info) => info.getValue(),
+      cell: (info) => <Link to={`/admin/users/${count}`}>{info.getValue()}</Link>,
       header: "State"
     })
   ];
 
   return (
-    <div>
-      <Heading as='h2'>Admin Page</Heading>
+    <Box maxWidth='100%'>
+      <Heading as='h2' textAlign='center' my='10' color='#048FC7'>
+        Admin Page
+      </Heading>
 
       <DataTable columns={columns} data={users} />
-    </div>
+    </Box>
   )
 }
-
-// const Admin = () => {
-//   const [users, setUsers] = useState([]);
-
-//   useEffect(() => {
-//     const usersList = async (name) => {
-//       // let users = await getUsers(name);
-//       let users = await YoplyApi.getUsers(name)
-
-//       setUsers(users);
-//     }
-
-//     usersList()
-//   }, []);
-
-//   console.log('users: ', users)
-
-//   if (!users) return null;
-
-//   // add a table for each field and a button to handle pending/active user
-//   // admin also needs a form to add users
-
-//   return (
-//     <div>
-//       <h1>Admin Page</h1>
-
-//       <div>
-//         <ul>
-//           {
-//             users.map(u =>
-//               <li key={u.id}>
-//                 {u.firstName}
-//               </li>  
-//             )
-//           }
-//         </ul>
-//       </div>
-//     </div>
-//   )
-// }
 
 export default Admin;
