@@ -42,7 +42,7 @@ const NewUser = () => {
       const res = await YoplyApi.signup(formData);
      
       if (res) {
-        // if updated, redirect to admin page
+        // if successfully added, redirect to admin page
         navigate('/admin');
       } else {
         return;
@@ -58,7 +58,7 @@ const NewUser = () => {
         Add New User
       </Heading>
 
-      <Box maxWidth="100%" ml="60">
+      <Box maxWidth="sm" ml="5">
         <Link to="/admin">
           <ArrowBackIcon boxSize={8} color='#048FC7'></ArrowBackIcon>
         </Link>

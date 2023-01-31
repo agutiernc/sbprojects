@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import YoplyApi from "../api/api";
-import { Heading, Box, Button } from "@chakra-ui/react";
+import { Heading, Box, Button, Center } from "@chakra-ui/react";
 import { createColumnHelper } from "@tanstack/react-table";
 import DataTable from "./DataTable";
 
@@ -21,7 +21,7 @@ const Admin = () => {
 
   if (!users) return null;
 
-  let count; // get IDs for URL
+  let userIDs; // get IDs for URL
 
   // Gets info for Table Columns
   const columnHelper = createColumnHelper();
@@ -29,41 +29,43 @@ const Admin = () => {
   const columns = [
     columnHelper.accessor("id", {
       cell: (info) => {
-        count = info.getValue();
+        userIDs = info.getValue();
         
-        return <Link to={`/admin/users/${count}`}>{info.getValue()}</Link>
+        return <Link to={`/admin/users/${userIDs}`}>{info.getValue()}</Link>
       },
       header: "ID"
     }),
     columnHelper.accessor("email", {
-      cell: (info) => <Link to={`/admin/users/${count}`}>{info.getValue()}</Link>,
+      cell: (info) => <Link to={`/admin/users/${userIDs}`}>{info.getValue()}</Link>,
       header: "Email"
     }),
     columnHelper.accessor("firstName", {
-      cell: (info) => <Link to={`/admin/users/${count}`}>{info.getValue()}</Link>,
+      cell: (info) => <Link to={`/admin/users/${userIDs}`}>{info.getValue()}</Link>,
       header: "First Name"
     }),
     columnHelper.accessor("lastName", {
-      cell: (info) => <Link to={`/admin/users/${count}`}>{info.getValue()}</Link>,
+      cell: (info) => <Link to={`/admin/users/${userIDs}`}>{info.getValue()}</Link>,
       header: "Last Name"
     }),
     columnHelper.accessor("state", {
-      cell: (info) => <Link to={`/admin/users/${count}`}>{info.getValue()}</Link>,
+      cell: (info) => <Link to={`/admin/users/${userIDs}`}>{info.getValue()}</Link>,
       header: "State"
     })
   ];
 
   return (
     <Box maxWidth='100%'>
-      <Heading as='h2' textAlign='center' my='10' color='#048FC7'>
+      <Heading as='h2' textAlign='center' mt='8' color='#048FC7'>
         Admin Page
       </Heading>
 
-      <Box maxWidth="20%" mx="auto" my='10'>
+      <Center>
+      <Box  my='8'>
         <Link to="/admin/newuser">
           <Button colorScheme='blue'>Add New User</Button>
         </Link>
       </Box>
+      </Center>
 
       <DataTable columns={columns} data={users} />
     </Box>

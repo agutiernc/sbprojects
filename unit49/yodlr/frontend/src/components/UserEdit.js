@@ -77,7 +77,7 @@ const UserEdit = () => {
         Update User
       </Heading>
 
-      <Box maxWidth="100%" ml="60">
+      <Box maxWidth="sm" ml="5">
         <Link to="/admin">
           <ArrowBackIcon boxSize={8} color='#048FC7'></ArrowBackIcon>
         </Link>

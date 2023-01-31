@@ -53,8 +53,8 @@ const SignupForm = () => {
         Register
       </Heading>
 
-      <Flex width="full" align="center" justifyContent="center">
-        <Box p={8} maxWidth="80%" borderWidth={1} borderRadius={8} boxShadow="lg">
+      <Flex maxWidth="full" align="center" justifyContent="center">
+        <Box p={8} maxWidth="sm" borderWidth={1} borderRadius={8} boxShadow="lg">
           <Box my={4}>
             <form onSubmit={handleSubmit} mx='auto'>
               <FormControl isRequired>
